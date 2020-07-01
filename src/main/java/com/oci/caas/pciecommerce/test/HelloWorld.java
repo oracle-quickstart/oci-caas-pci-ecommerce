@@ -1,5 +1,10 @@
 package com.oci.caas.pciecommerce.test;
 
+import com.oci.caas.pciecommerce.model.Person;
+import com.oci.caas.pciecommerce.model.PersonRowMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +14,7 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.exception.*;
 import com.stripe.param.PaymentIntentCreateParams;
 
-import io.github.cdimascio.dotenv.Dotenv;
+import java.util.ArrayList;
 
 @Controller
 public class HelloWorld {
@@ -58,9 +63,24 @@ public class HelloWorld {
         return 1000;
     }
 
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
     @GetMapping("/greeting")
     public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) {
+        String query = "Select personid, firstname, lastname from persons";
+        ArrayList<Person> personArrayList = new ArrayList<>();
+        jdbcTemplate.query(
+                query,
+                (rs, rowNum) -> new Person(rs.getLong("PERSONID"), rs.getString("FIRSTNAME"), rs.getString("LASTNAME"))
+        ).forEach(person -> {
+            personArrayList.add(person);
+            System.out.println(person.toString());});
+//        List<Person> personArrayList = (List<Person>) jdbcTemplate.queryForObject(query, new PersonRowMapper());
+//        personArrayList.forEach(Person -> System.out.println());
         model.addAttribute("name", name);
+        model.addAttribute("persons", personArrayList);
+
         return "greeting";
     }
 
@@ -72,9 +92,8 @@ public class HelloWorld {
     @PostMapping(value = "/create-payment-intent", produces = "application/json")
     @ResponseBody
     public CreatePaymentResponse secret(@RequestBody CreatePaymentBody postBody) throws StripeException {
-        Dotenv dotenv = Dotenv.load();
-        String private_key = dotenv.get("STRIPE_SECRET_KEY");
-        String public_key = dotenv.get("STRIPE_PUBLISHABLE_KEY");
+        String private_key = System.getenv("STRIPE_SECRET_KEY");
+        String public_key = System.getenv("STRIPE_PUBLISHABLE_KEY");
 
         Stripe.apiKey = private_key;
 
