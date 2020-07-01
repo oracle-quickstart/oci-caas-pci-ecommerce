@@ -6,5 +6,25 @@
 </head>
 <body>
 <p th:text="'Hello, ' + ${name} + '!'" />
+<table>
+    <thead>
+    <tr>
+        <th> id </th>
+        <th> firstname </th>
+        <th> lastname </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${persons.empty}">
+        <td colspan="2"> No Books Available </td>
+    </tr>
+    <tr th:each="person : ${persons}">
+        <td><span th:text="${person.getPersonid()}"> Title </span></td>
+        <td><span th:text="${person.getFirstName()}"> Author </span></td>
+        <td><span th:text="${person.getLastName()}"> Author </span></td>
+
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
