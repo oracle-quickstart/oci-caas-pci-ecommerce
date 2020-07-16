@@ -1,0 +1,26 @@
+<!doctype html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/js/register.js" defer></script>
+</head>
+<body>
+<!--begin log form -->
+<div class="register-form">
+    <h2>Create an account</h2>
+    <form>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="text" title="username" id="username" placeholder="email" />
+        <input type="password" title="username" id="password" placeholder="password" />
+        <input type="password" title="username" id="password2" placeholder="password" />
+
+        <button type="button" class="btn" id="submit-btn">Register</button>
+    </form>
+</div>
+<!--end log form -->
+
+</body>
+</html>

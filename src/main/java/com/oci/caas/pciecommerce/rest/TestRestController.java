@@ -1,33 +1,29 @@
-package com.oci.caas.pciecommerce.test;
+package com.oci.caas.pciecommerce.rest;
 
 import com.oci.caas.pciecommerce.model.Person;
-import com.oci.caas.pciecommerce.model.PersonRowMapper;
+
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.stripe.Stripe;
-import com.stripe.model.PaymentIntent;
-import com.stripe.exception.*;
-import com.stripe.param.PaymentIntentCreateParams;
-
 import java.util.ArrayList;
 
 @Controller
-public class HelloWorld {
+public class TestRestController {
 
     static class CreatePaymentBody {
         private Object[] items;
-
         private String currency;
-
         public Object[] getItems() {
             return items;
         }
-
         public String getCurrency() {
             return currency;
         }
@@ -76,17 +72,10 @@ public class HelloWorld {
         ).forEach(person -> {
             personArrayList.add(person);
             System.out.println(person.toString());});
-//        List<Person> personArrayList = (List<Person>) jdbcTemplate.queryForObject(query, new PersonRowMapper());
-//        personArrayList.forEach(Person -> System.out.println());
+
         model.addAttribute("name", name);
         model.addAttribute("persons", personArrayList);
-
         return "greeting";
-    }
-
-    @GetMapping("/payment")
-    public String payment() {
-        return "payment";
     }
 
     @PostMapping(value = "/create-payment-intent", produces = "application/json")

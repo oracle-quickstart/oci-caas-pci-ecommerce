@@ -32,3 +32,4 @@ build/
 
 .env
 .DS_STORE
+src/main/resources/static/images/
