@@ -1,0 +1,22 @@
+.carousel-sizing {
+    height: border-box;
+}
+
+/* control image height */
+.card-img-top {
+    max-height: 250px;
+    overflow:hidden;
+}
+
+/* smoother transitions */
+.carousel-inner>.carousel-item.next.left,
+.carousel-inner>.carousel-item.prev.right {
+    transition: all 1s ease;
+}
+
+/** HEADING TOP SPACING **/
+.products-heading {
+    margin-top:40px;
+    margin-bottom: 40px;
+    text-align: center;
+}

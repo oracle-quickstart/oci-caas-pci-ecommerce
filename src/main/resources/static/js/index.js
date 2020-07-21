@@ -1,18 +1,27 @@
-//variables
-// const cartBtn = document.querySelector(".cart-btn");
-const cartBtn = document.querySelector(".shopping-cart");
+
+// shopping cart modal toggle
+const cartBtn = document.getElementById("cart-btn");
+
+// insert items
+const productsDOM = document.getElementById("categ-1");
+
+// add to cart list
+const showCart = document.querySelector(".show-cart");
+const cartItems = document.querySelector(".total-count");
+
+// in modal
+const cartTotal = document.querySelector(".total-cart");
+
+
 
 const closeCartBtn = document.querySelector(".close-cart");
 const clearCartBtn = document.querySelector(".clear-cart");
 const cartDOM = document.querySelector(".cart");
 const cartOverlay = document.querySelector(".cart-overlay");
-// const cartItems = document.querySelector(".cart-items");
-const cartItems = document.getElementById("cart-items");
 
-const cartTotal = document.querySelector(".cart-total");
 const cartContent = document.querySelector(".cart-content");
-const productsDOM = document.querySelector(".products-center");
-const showCart = document.querySelector(".show-cart");
+
+
 
 //cart
 let cart = [];
@@ -48,27 +57,26 @@ class Categories {
 // display products
 class UI {
     displayProducts(products) {
-        console.log(products);
         let result = "";
         products.forEach(product => {
             result += `
-                <article class="product" >
-                    <div class="img-container">
-                        <img src="/images/products/prod${product.item_id}.png" alt="product" class="product-img" />
-                        <button class="bag-btn" 
+                <div class="card">
+                    <img class="card-img-top" src="/images/products/prod${product.item_id}.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">${product.name}</h5>
+                        <p class="card-text">Price: $${product.unit_price}</p>
+                        <button type="button"
                             data-id=${product.item_id}
                             data-name=${product.name}
-                            data-unit_price=${product.unit_price}
-                         >
-                            <i class="fas fa-shopping-cart"></i>
-                            add to bag
+                            data-unit_price=${product.unit_price} 
+                            class="add-to-cart btn btn-primary">Add to cart
                         </button>
+                                       
                     </div>
-                    <h3>${product.name}</h3>
-                    <h4>$${product.unit_price}</h4>
-                </article>
+                </div>
             `;
         });
+
         productsDOM.innerHTML = result;
     }
 }
@@ -81,7 +89,6 @@ class Item {
         this.price = price;
         this.count = count;
     }
-
 }
 
 class ShoppingCart {
@@ -112,21 +119,25 @@ class ShoppingCart {
         cart.push(item);
         this.saveCart();
         cartItems.innerHTML = parseInt(cartItems.innerHTML) + count;
-        this.displayCart();
+
     }
 
-    removeItemFromCart(name) {
+    totalCount () {
+        var totalCount = 0;
         for (var item in cart) {
-            if (cart[item].name === name) {
-                cart[item].count--;
-                if (cart[item].count === 0) {
-                    cart.splice(item, 1);
-                }
-                break;
-            }
+            totalCount += cart[item].count;
         }
-        saveCart();
-    };
+        return totalCount;
+    }
+
+    totalCart () {
+        var totalCart = 0;
+        for (var item in cart) {
+            totalCart += cart[item].price * cart[item].count;
+        }
+        return Number(totalCart.toFixed(2));
+    }
+
     listCart() {
         var cartCopy = [];
         let i;
@@ -141,11 +152,27 @@ class ShoppingCart {
             cartCopy.push(itemCopy);
         }
         return cartCopy;
-    };
+    }
+
+    removeItemFromCart(name) {
+        for (var item in cart) {
+            if (cart[item].name === name) {
+                cart[item].count--;
+                if (cart[item].count === 0) {
+                    cart.splice(item, 1);
+                }
+                break;
+            }
+        }
+        this.saveCart();
+    }
+
     displayCart() {
         var cartArray = this.listCart();
+        console.log("cart asdfaksdfjksdflajsdk ");
+
         var output = "";
-        for (var i in cartArray) {
+        for (let i in cartArray) {
             output +=
                 "<tr>" +
                 "<td>" +
@@ -176,9 +203,14 @@ class ShoppingCart {
         }
         // $(".show-cart").html(output);
         showCart.innerHTML = output;
+        cartTotal.innerHTML = this.totalCart();
+
         // $(".total-cart").html(shoppingCart.totalCart());
         // $(".total-count").html(shoppingCart.totalCount());
     }
+
+
+
     printCart () {
         console.log(cart);
     }
@@ -186,6 +218,7 @@ class ShoppingCart {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+// window.addEventListener("load", () => {
     const ui = new UI();
     const products = new Products();
     //get all products
@@ -206,7 +239,7 @@ function addEventListeners () {
     console.log("in add event listener");
 
     const shoppingcart = new ShoppingCart();
-    const bagBtns = document.querySelectorAll(".bag-btn");
+    const bagBtns = document.querySelectorAll(".add-to-cart");
     bagBtns.forEach(bagBtn => {
         bagBtn.addEventListener("click", (event) => {
             let item = event.target;
@@ -214,9 +247,12 @@ function addEventListeners () {
         });
     });
 
-    cartBtn.addEventListener("click", shoppingcart.printCart);
+    cartBtn.addEventListener("click", () => {
+        shoppingcart.displayCart(shoppingcart);
+    });
 
-}
+
+};
 
 /*
 var shoppingCart = (function () {
