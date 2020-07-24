@@ -57,6 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/landing").permitAll()
 
                 .antMatchers("/checkout").hasRole("USER")
+                .antMatchers("/process-order").hasRole("USER")
+
 
                 .anyRequest().authenticated()
                 .and()
@@ -64,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
                 .loginPage("/login").permitAll()
                 .loginProcessingUrl("/authenticate").permitAll()
-                .defaultSuccessUrl("/login?success=true")
+//                .defaultSuccessUrl("/checkout")
                 .failureUrl("/login?error=true").permitAll()
                 .and()
 

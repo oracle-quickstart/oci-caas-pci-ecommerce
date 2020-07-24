@@ -125,7 +125,7 @@ class ShoppingCart {
                 break;
             }
         }
-        saveCart();
+        this.saveCart();
     };
     listCart() {
         var cartCopy = [];
@@ -179,6 +179,12 @@ class ShoppingCart {
         // $(".total-cart").html(shoppingCart.totalCart());
         // $(".total-count").html(shoppingCart.totalCount());
     }
+
+    clearCart() {
+        cart = [];
+        this.saveCart();
+    }
+
     printCart () {
         console.log(cart);
     }
@@ -213,6 +219,7 @@ function addEventListeners () {
             shoppingcart.addItemToCart(item.dataset.item_id, item.dataset.name, item.dataset.unit_price, 1);
         });
     });
+
 
     cartBtn.addEventListener("click", shoppingcart.printCart);
 

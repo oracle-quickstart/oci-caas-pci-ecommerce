@@ -4,10 +4,6 @@ document.getElementById("submit-btn").addEventListener("click", authenticate);
 document.getElementById("logout-btn").addEventListener("click", logout);
 
 function authenticate() {
-    let user_auth = [{
-        username: document.getElementById("username").value,
-        password: document.getElementById("password").value}];
-    console.log(JSON.stringify(user_auth));
     fetch("/authenticate", {
         method: "POST",
         headers: {
