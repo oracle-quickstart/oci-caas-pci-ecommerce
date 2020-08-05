@@ -20,7 +20,11 @@ window.addEventListener('load', function () {
         shoppingcart.printCart();
     }
     loadUI(shoppingcart);
-    // fetch("/create-payment-intent", {
+
+    let order = new Object();
+    order.items = shoppingcart.cart;
+    console.log(JSON.stringify(shoppingcart.cart));
+
     fetch("/process-order", {
 
         method: "POST",
@@ -28,7 +32,7 @@ window.addEventListener('load', function () {
             "Content-Type": "application/json",
             'X-CSRF-Token': token
         },
-        body: JSON.stringify(shoppingcart.cart)
+        body: JSON.stringify(order)
     })
         .then(function (result) {
             return result.json();
@@ -126,6 +130,10 @@ var payWithCard = function (stripe, card, clientSecret) {
             } else {
                 // The payment succeeded!
                 orderComplete(result.paymentIntent.id);
+
+                setTimeout(function() {
+                    window.location = "/thankyou";
+                }, (1 * 1000));
             }
         });
 };

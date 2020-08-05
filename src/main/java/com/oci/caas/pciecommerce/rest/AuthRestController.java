@@ -84,6 +84,6 @@ public class AuthRestController {
             return new authResponse(user.getUsername(), user.getUser_role(), user.getUser_id());
         }
 
-        return null;
+        return new authResponse("Guest", "ROLE_ANONYMOUS", -1);
     }
 }

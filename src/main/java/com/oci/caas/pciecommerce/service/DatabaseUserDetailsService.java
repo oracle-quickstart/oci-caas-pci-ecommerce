@@ -23,7 +23,7 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String query = "SELECT user_id, email, password, user_role FROM STORE_USER WHERE email = ?";
+        String query = "SELECT user_id, email, password, user_role FROM STORE_USER WHERE email = ? AND user_role = 'ROLE_USER'";
         List<User> personList = jdbcTemplate.query(query, new Object[] { username }, new UserRowMapper());
         for (User u : personList) {
             System.out.println(u);

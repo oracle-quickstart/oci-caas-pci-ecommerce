@@ -16,7 +16,10 @@ const checkoutBtn = document.getElementById("checkout-btn");
 // clear car
 const clearCartBtn = document.querySelector(".clear-cart");
 
-
+const userDropDown = document.getElementById("user-dropdown");
+const loginBtn = document.getElementById("login-btn");
+const logoutBtn = document.getElementById("logout-btn");
+const token = document.querySelector('input[name="_csrf"]').value;
 
 const closeCartBtn = document.querySelector(".close-cart");
 const cartDOM = document.querySelector(".cart");
@@ -233,24 +236,29 @@ class ShoppingCart {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-// window.addEventListener("load", () => {
     const ui = new UI();
     const products = new Products();
-    //get all products
+
     products.getProducts().then(products => ui.displayProducts(products))
         .then(addEventListeners);
 
-    fetch("/currentUser", {
-        method: "GET",
-        headers: {},
-    }).then(
-        function (result) {
-            console.log('res:' +JSON.stringify(result, null, 2));
+    getCurrUser().then(currUser => {
+        userDropDown.innerHTML = "Logged in as: " + currUser.username;
+        if (currUser.username == "Guest") {
+            logoutBtn.style.display = 'none';
+            loginBtn.style.display = 'block';
+
+        } else {
+            logoutBtn.style.display = 'block';
+            loginBtn.style.display = 'none';
+        }
     });
 
 });
 
 function addEventListeners () {
+
+    logoutBtn.addEventListener("click", logout);
 
     const shoppingcart = new ShoppingCart();
     const bagBtns = document.querySelectorAll(".add-to-cart");
@@ -275,7 +283,7 @@ function addEventListeners () {
         cartItems.innerHTML = shoppingcart.totalCount();
     });
     checkoutBtn.addEventListener("click", () => {
-        location.href = "/checkout";
+        location.href = "/login";
     });
 
     showCart.addEventListener("click", (event) => {
@@ -301,46 +309,29 @@ function addEventListeners () {
         console.log(shoppingcart.printCart())
     });
 
-    /*
-    const deleteItem = document.querySelectorAll(".delete-item");
-    deleteItem.forEach(btn => {
-        btn.addEventListener("click", (event) => {
-            let item = event.target;
-            let name = item.dataset.name;
-            shoppingcart.removeItemFromCartAll(name);
-            shoppingcart.displayCart();
-        });
-    });
-
-    const minusItem = document.querySelectorAll(".minus-item");
-    minusItem.forEach(btn => {
-        btn.addEventListener("click", (event) => {
-            let item = event.target;
-            let name = item.dataset.name;
-            shoppingcart.removeItemFromCart(name);
-            shoppingcart.displayCart();
-        });
-    });
-
-    const addItem = document.querySelectorAll(".minus-item");
-    addItem.forEach(btn => {
-        btn.addEventListener("click", (event) => {
-            let item = event.target;
-            let name = item.dataset.name;
-            shoppingcart.addItemToCart(name);
-            shoppingcart.displayCart();
-        });
-    });
-
-    const typeItem = document.querySelectorAll(".minus-item");
-    typeItem.forEach(btn => {
-        btn.addEventListener("click", (event) => {
-            let item = event.target;
-            let name = item.dataset.name;
-            let count = Number(btn.value);
-            shoppingcart.setCountForItem(name, count);
-            shoppingcart.displayCart();
-        });
-    }); */
-
 };
+
+async function getCurrUser() {
+    try {
+        let result =  await fetch("/currentUser", {
+            method: "GET",
+            headers: {},
+        }).then(result => result.json());
+        return result;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function logout() {
+    fetch("/logout", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            'X-CSRF-Token': token
+        },
+    }).then(result => {
+            console.log('res:' +JSON.stringify(result, null, 2));
+            window.location = "/";
+    });
+}
