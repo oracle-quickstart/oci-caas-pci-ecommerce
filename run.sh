@@ -7,4 +7,5 @@ dotenv () {
 
 # Run dotenv on login
 dotenv
+mvn clean
 mvn spring-boot:run
