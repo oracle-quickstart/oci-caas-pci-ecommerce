@@ -1,40 +1,26 @@
-/* Variables */
-
-/** {*/
-/*    box-sizing: border-box;*/
-/*}*/
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    height: 100vh;
-    width: 100vw;
+.container {
+    max-width: 960px;
 }
 
-form {
-    width: 30vw;
-    min-width: 500px;
-    align-self: center;
-    box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
-    0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
-    border-radius: 7px;
-    padding: 40px;
+.lh-condensed {
+    line-height: 1.25;
 }
 
-input {
-    border-radius: 6px;
-    margin-bottom: 6px;
-    padding: 12px;
-    border: 1px solid rgba(50, 50, 93, 0.1);
-    height: 44px;
-    font-size: 16px;
-    width: 100%;
-    background: white;
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+/* STRIPE */
 
 .result-message {
     line-height: 22px;

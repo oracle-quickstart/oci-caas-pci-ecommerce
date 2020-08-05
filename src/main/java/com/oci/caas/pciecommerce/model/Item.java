@@ -17,6 +17,10 @@ public class Item {
 
     }
 
+    public Item(long item_id) {
+        this.item_id = item_id;
+    }
+
     public long getItem_id() {
         return item_id;
     }

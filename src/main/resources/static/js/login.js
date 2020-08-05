@@ -1,13 +1,9 @@
 let token = document.querySelector('input[name="_csrf"]').value;
 let loginForm = document.getElementById("login-form");
 document.getElementById("submit-btn").addEventListener("click", authenticate);
-document.getElementById("logout-btn").addEventListener("click", logout);
+// document.getElementById("logout-btn").addEventListener("click", logout);
 
 function authenticate() {
-    let user_auth = [{
-        username: document.getElementById("username").value,
-        password: document.getElementById("password").value}];
-    console.log(JSON.stringify(user_auth));
     fetch("/authenticate", {
         method: "POST",
         headers: {
@@ -30,5 +26,5 @@ function logout() {
     }).then(
         function (result) {
             console.log('res:' +JSON.stringify(result, null, 2));
-        });
+    });
 }

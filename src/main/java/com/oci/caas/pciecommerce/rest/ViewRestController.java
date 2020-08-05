@@ -26,8 +26,18 @@ public class ViewRestController {
         return "payment";
     }
 
+    @GetMapping("/")
+    public String index() {
+        return "landing";
+    }
+
     @GetMapping("/landing")
     public String landing() {
         return "landing";
+    }
+
+    @GetMapping("/thankyou")
+    public String success() {
+        return "success";
     }
 }
