@@ -62,7 +62,7 @@
 			<groupId>com.oracle.ojdbc</groupId>
 			<artifactId>ojdbc8</artifactId>
 			<version>19.3.0.0</version>
-			<scope>runtime</scope>
+<!--			<scope>runtime</scope>-->
 			<!--exclude ons and simple fan to suppress warning-->
 			<exclusions>
 				<exclusion>
@@ -91,18 +91,23 @@
 
 
 	</dependencies>
-
+	<!--	
+	<packaging>war</packaging>
+	-->
 	<build>
-			<!--<resources>
-				<resource>
-					<directory>src/main/resources</directory>
-					<includes>
-						<include>**/application.properties</include>
-						<include>**/templates/**</include>
-						<include>**/static/**</include>
-					</includes>
-				</resource>
-			</resources>-->
+		<!--
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/application.properties</include>
+					<include>**/templates/**</include>
+					<include>**/static/**</include>
+				</includes>
+			</resource>
+		</resources>
+		-->
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

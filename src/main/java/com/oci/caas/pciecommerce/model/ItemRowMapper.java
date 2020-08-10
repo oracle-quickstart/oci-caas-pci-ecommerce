@@ -12,6 +12,9 @@ public class ItemRowMapper implements RowMapper<Item> {
         item.setName(resultSet.getString("name"));
         item.setStock(resultSet.getInt("stock"));
         item.setUnit_price(resultSet.getDouble("unit_price"));
+        item.setDescription(resultSet.getString("description"));
+        item.setMain_category(resultSet.getLong("main_category"));
+
         return item;
     }
 }

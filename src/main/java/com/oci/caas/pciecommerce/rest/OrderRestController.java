@@ -19,22 +19,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-//import oracle.jdbc.OracleTypes;
-
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import oracle.jdbc.*;
 
 @Controller
 public class OrderRestController {
-
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     static class ItemOrder {
         private String name;
-        private String id;
+        private long id;
         private int count;
         private double price;
         public double getPrice() {
@@ -43,7 +44,7 @@ public class OrderRestController {
         public int getCount() {
             return count;
         }
-        public String getId() {
+        public long getId() {
             return id;
         }
         public String getName() {
@@ -92,36 +93,57 @@ public class OrderRestController {
         }
 
         int itemCount = items.length;
-        String[] il_in = new String[itemCount];
+        int[] il_in = new int[itemCount];
         int[] ic_in = new int[itemCount];
+        ArrayList<Integer> il = new ArrayList<Integer>(itemCount);
+        ArrayList<Integer> ic = new ArrayList<Integer>(itemCount);
+
         double total = 0;
         for (int i = 0; i < itemCount; i++) {
-            il_in[i] = items[i].getId();
-            ic_in[i] = items[i].getCount();
+//            il_in[i] = (int) items[i].getId();
+            il.add((int) items[i].getId());
+//            ic_in[i] = items[i].getCount();
+            ic.add(items[i].getCount());
+
             total += items[i].getPrice() * items[i].getCount();
         }
 
-/*
+//        System.out.println("total " + total);
+//        for (int i: il) {
+//            System.out.println("il: " + i);
+//        }
+//        for (int j: ic) {
+//            System.out.println("ic: " + j);
+//        }
+
         SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("createCart")
                 .declareParameters(
                         new SqlParameter("uid_in", OracleTypes.INTEGER),
-                        new SqlParameter("il_in", OracleTypes.ARRAY, "ItemList"),
-                        new SqlParameter("ic_in", OracleTypes.ARRAY, "ItemCounts"),
+                        new SqlParameter("il_in", OracleTypes.ARRAY, "ECOM.ItemIds"),
+                        new SqlParameter("ic_in", OracleTypes.ARRAY, "ECOM.ItemCounts"),
                         new SqlOutParameter("cartid_out", OracleTypes.INTEGER),
                         new SqlOutParameter("total_out", OracleTypes.DECIMAL));
 
         Map<String, Object> inParamMap = new HashMap<String, Object>();
         inParamMap.put("uid_in", uid);
-        inParamMap.put("il_in", il_in);
-        inParamMap.put("ic_in", ic_in);
+        inParamMap.put("il_in", il);
+        inParamMap.put("ic_in", ic);
         SqlParameterSource in = new MapSqlParameterSource(inParamMap);
 
 
         Map<String, Object> rs = simpleJdbcCall.execute(in);
-        System.out.println((int) rs.get("cartid_out"));
-        System.out.println((double) rs.get("total_out"));
-*/
+//        System.out.println((int) rs.get("cartid_out"));
+//        System.out.println((double) rs.get("total_out"));
+
+//        Connection con = null;
+//        try {
+//            con = jdbcTemplate.getDataSource().getConnection();
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//        oracle.jdbc.OracleConnection oraConn = (oracle.jdbc.OracleConnection) con;
+//        java.sql.Array sqlArray = oraConn.createARRAY("typeName", array);
 
         return total * 100;
     }
