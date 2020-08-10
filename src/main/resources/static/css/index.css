@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 .carousel-sizing {
     height: border-box;
 }
@@ -19,4 +23,17 @@
     margin-top:40px;
     margin-bottom: 40px;
     text-align: center;
+}
+.jumbotron-image {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/*.carousel-inner > .item > img,*/
+/*.carousel-inner > .item > a > img {*/
+/*    max-height: 500px;    !* Set slide height here *!*/
+/*}*/
+.carousel-item img {
+    max-height: 500px; /* input your desired height here */
 }

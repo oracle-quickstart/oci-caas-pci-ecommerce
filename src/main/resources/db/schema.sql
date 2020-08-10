@@ -81,14 +81,16 @@ INSERT INTO ECOM.ITEM (name, stock, unit_price) VALUES ('prod1', 100, 10.00);
 INSERT INTO ECOM.ITEM (name, stock, unit_price) VALUES ('prod2', 100, 15.00);
 
 
-CREATE OR REPLACE TYPE ItemList AS VARRAY(200) OF VARCHAR2(20);/
-CREATE OR REPLACE TYPE ItemCounts AS VARRAY(200) OF INTEGER;/
+CREATE OR REPLACE TYPE ItemIds AS VARRAY(200) OF INTEGER;
+/
+CREATE OR REPLACE TYPE ItemCounts AS VARRAY(200) OF INTEGER;
+/
 
 
 SET SERVEROUTPUT ON;
 DECLARE
     uid INTEGER     := -1;
-    il ItemList     := ItemList('23', '24');
+    il ItemIds     := ItemIds(23, 24);
     ic ItemCounts    := ItemCounts(12, 8);
     cid INTEGER;
     tout DECIMAL;
@@ -117,8 +119,8 @@ ORDER BY
     ECOM.shopping_cart.cart_id DESC;
 
 CREATE OR REPLACE PROCEDURE ECOM.createCart (uid_in IN INTEGER DEFAULT -1,
-                                        il_in IN ItemList DEFAULT NULL,
-                                        ic_in IN ItemCounts DEFAULT NULL,
+                                        il_in IN ECOM.ItemIds DEFAULT NULL,
+                                        ic_in IN ECOM.ItemCounts DEFAULT NULL,
                                         cartid_out OUT INTEGER,
                                         total_out OUT DECIMAL) IS
 BEGIN

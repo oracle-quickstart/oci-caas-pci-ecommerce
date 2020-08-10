@@ -68,12 +68,12 @@ class UI {
             result += `
                 <div class="card">
                     <img class="card-img-top" src="/images/products/prod${product.item_id}.png" alt="Card image cap">
-                    <div class="card-body">
+                    <div class="card-body text-info">
                         <h5 class="card-title">${product.name}</h5>
                         <p class="card-text">Price: $${product.unit_price}</p>
                         <button type="button"
                             data-id=${product.item_id}
-                            data-name=${product.name}
+                            data-name="${product.name}"
                             data-unit_price=${product.unit_price} 
                             class="add-to-cart btn btn-primary">Add to cart
                         </button>
@@ -81,9 +81,11 @@ class UI {
                     </div>
                 </div>
             `;
+            document.getElementById("category-items-" + product.main_category).innerHTML += result;
+            result = "";
         });
 
-        productsDOM.innerHTML = result;
+        // productsDOM.innerHTML = result;
     }
 }
 

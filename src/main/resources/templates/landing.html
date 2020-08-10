@@ -19,7 +19,7 @@
 <body>
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#">Cat Shop</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -42,10 +42,14 @@
                             Categories
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            <a class="dropdown-item" href="#category-25">Dry Food</a>
+                            <a class="dropdown-item" href="#category-26">Wet Food</a>
+                            <a class="dropdown-item" href="#category-27">Food Pouches</a>
+                            <a class="dropdown-item" href="#category-41">Auto Feeders</a>
+                            <a class="dropdown-item" href="#category-42">Bowls</a>
+                            <a class="dropdown-item" href="#category-61">Cleaning Supplies</a>
+<!--                            <div class="dropdown-divider"></div>-->
+<!--                            <a class="dropdown-item" href="#">Something</a>-->
                         </div>
                     </li>
                 </ul>
@@ -77,22 +81,29 @@
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
             </div><!-- /header-text -->
-            <div class="carousel-item active">
-                <img src="images/hero/01.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-item active img-fluid">
+                <img src="images/hero/hero1.jpg" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h2>Welcome!</h2>
                     <h5>Buy Cat Products</h5>
                 </div>
             </div>
-            <div class="carousel-item">
-                <img src="images/hero/02.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-item active img-fluid">
+                <img src="images/hero/hero2.jpg" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h2>Welcome!</h2>
                     <h5>Buy Cat Products</h5>
                 </div>
             </div>
-            <div class="carousel-item">
-                <img src="images/hero/03.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-item active img-fluid">
+                <img src="images/hero/hero3.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Welcome!</h2>
+                    <h5>Buy Cat Products</h5>
+                </div>
+            </div>
+            <div class="carousel-item active img-fluid">
+                <img src="images/hero/hero4.jpg" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h2>Welcome!</h2>
                     <h5>Buy Cat Products</h5>
@@ -104,26 +115,97 @@
 
     <div class="container products">
 
-        <div class="row products-heading">
-            <div class="col-lg-12">
+        <div class="row products-heading" id="category-25">
+            <div class="col-lg-12 mb-3">
                 <div class="heading-category">
-                    <h2>Category</h2>
+                    <h2>Dry Food</h2>
+                </div>
+            </div>
+            <div class="row products-cards" >
+                <div class="card-deck" id="category-items-25">
                 </div>
             </div>
         </div>
 
-        <div class="row products-cards" >
-            <div class="card-deck" id="categ-1">
+        <div class="row mt-3 products-heading" id="category-26">
+            <div class="col-lg-12 mb-3">
+                <div class="heading-category">
+                    <h2>Wet Food</h2>
+                </div>
+            </div>
+            <div class="row products-cards">
+                <div class="card-deck" id="category-items-26">
+                </div>
+            </div>
+        </div>
 
-                <!--<div class="card">
-                    <img class="card-img-top" src="..." alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <a href="#" data-name="Lemon" data-price="5" class="add-to-cart btn btn-primary">Add to cart</a>
-                    </div>
-                </div>-->
+        <div class="row products-heading" id="category-27">
+            <div class="col-lg-12 mb-3">
+                <div class="heading-category">
+                    <h2>Food Pouches</h2>
+                </div>
+            </div>
+            <div class="row products-cards">
+                <div class="card-deck" id="category-items-27">
+                </div>
+            </div>
+        </div>
+        <div class="jumbotron jumbotron-fluid text-white jumbotron-image shadow" style="background-image: url(/images/hero/jumbo1.jpg);">
+            <div class="container">
+                <h2 class="mb-4">
+                    Cat Food
+                </h2>
+                <p class="mb-4">Treat your cat to some healthy snacks.
+                </p>
+            </div>
+        </div>
+    </div>
 
+    <div class="container products-group-2">
+
+        <div class="row products-heading" id="category-41">
+            <div class="col-lg-12 mb-3">
+                <div class="heading-category">
+                    <h2>Auto Feeders</h2>
+                </div>
+            </div>
+            <div class="row products-cards">
+                <div class="card-deck" id="category-items-41">
+                </div>
+            </div>
+        </div>
+
+        <div class="row products-heading" id="category-42">
+            <div class="col-lg-12 mb-3">
+                <div class="heading-category">
+                    <h2>Bowls</h2>
+                </div>
+            </div>
+            <div class="row products-cards">
+                <div class="card-deck" id="category-items-42">
+                </div>
+            </div>
+        </div>
+
+        <div class="row products-heading" id="category-61">
+            <div class="col-lg-12 mb-3">
+                <div class="heading-category">
+                    <h2>Cleaning Supplies</h2>
+                </div>
+            </div>
+            <div class="row products-cards">
+                <div class="card-deck" id="category-items-61">
+                </div>
+            </div>
+        </div>
+
+        <div class="jumbotron jumbotron-fluid text-white jumbotron-image shadow" style="background-image: url(/images/hero/jumbo2.jpg);">
+            <div class="container">
+                <h2 class="mb-4">
+                    Cat Cleaning Products
+                </h2>
+                <p class="mb-4">Show your cat some love.
+                </p>
             </div>
         </div>
     </div>
@@ -154,27 +236,16 @@
     <footer class="container py-5 border-top">
         <div class="row">
             <div class="col-12 col-md">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="d-block mb-2" role="img" viewBox="0 0 24 24" focusable="false"><title>Product</title><circle cx="12" cy="12" r="10"/><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"/></svg>
+                <img src="/images/clipart/logo.png" width="24" height="24" ></img>
                 <small class="d-block mb-3 text-muted">&copy; 2017-2020</small>
-            </div>
-            <div class="col-6 col-md">
-                <h5>Features</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="text-muted" href="#">Cool stuff</a></li>
-                    <li><a class="text-muted" href="#">Random feature</a></li>
-                    <li><a class="text-muted" href="#">Team feature</a></li>
-                    <li><a class="text-muted" href="#">Stuff for developers</a></li>
-                    <li><a class="text-muted" href="#">Another one</a></li>
-                    <li><a class="text-muted" href="#">Last time</a></li>
-                </ul>
             </div>
             <div class="col-6 col-md">
                 <h5>Resources</h5>
                 <ul class="list-unstyled text-small">
-                    <li><a class="text-muted" href="#">Business</a></li>
-                    <li><a class="text-muted" href="#">Education</a></li>
-                    <li><a class="text-muted" href="#">Government</a></li>
-                    <li><a class="text-muted" href="#">Gaming</a></li>
+                    <li><a class="text-muted" href="#">Catalogue</a></li>
+                    <li><a class="text-muted" href="#">Delivery</a></li>
+                    <li><a class="text-muted" href="#">FAQ</a></li>
+                    <li><a class="text-muted" href="#">Contact</a></li>
                 </ul>
             </div>
             <div class="col-6 col-md">
