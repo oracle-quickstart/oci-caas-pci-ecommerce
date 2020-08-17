@@ -34,6 +34,6 @@ html {
 /*.carousel-inner > .item > a > img {*/
 /*    max-height: 500px;    !* Set slide height here *!*/
 /*}*/
-.carousel-item img {
-    max-height: 500px; /* input your desired height here */
-}
+/*.carousel-item img {*/
+/*    max-height: 500px; !* input your desired height here *!*/
+/*}*/

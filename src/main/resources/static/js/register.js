@@ -15,5 +15,7 @@ function authenticate() {
     }).then(
         function (result) {
             console.log('res:' +JSON.stringify(result, null, 2));
+            //check if username is correct that is sent back or fail
+            document.getElementById("success-alert").style.display = "block";
         });
 }
