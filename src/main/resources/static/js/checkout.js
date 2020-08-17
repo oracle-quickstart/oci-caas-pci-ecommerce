@@ -10,6 +10,8 @@ let token = document.querySelector('input[name="_csrf"]').value;
 
 const productList = document.getElementById("product-list");
 let cart = [];
+let cart_id = -1;
+let cart_total = 0;
 
 
 window.addEventListener('load', function () {
@@ -21,9 +23,9 @@ window.addEventListener('load', function () {
     }
     loadUI(shoppingcart);
 
-    let order = new Object();
-    order.items = shoppingcart.cart;
-    console.log(JSON.stringify(shoppingcart.cart));
+    let order = {
+        'items' : shoppingcart.cart,
+    };
 
     fetch("/process-order", {
 
@@ -38,8 +40,12 @@ window.addEventListener('load', function () {
             return result.json();
         })
         .then(function (data) {
-            var elements = stripe.elements();
-            var style = {
+
+            cart_id = data.cartId;
+            cart_total = data.totalPayment;
+
+            let elements = stripe.elements();
+            let style = {
                 base: {
                     color: "#32325d",
                     fontFamily: 'Arial, sans-serif',
@@ -131,9 +137,27 @@ var payWithCard = function (stripe, card, clientSecret) {
                 // The payment succeeded!
                 orderComplete(result.paymentIntent.id);
 
-                setTimeout(function() {
-                    window.location = "/thankyou";
-                }, (1 * 1000));
+                let order = {
+                    'payment_intent' : result.paymentIntent.id,
+                    'cart_id' : cart_id,
+                    'cart_total' : cart_total,
+                };
+                fetch("/complete-order", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        'X-CSRF-Token': token
+                    },
+                    body: JSON.stringify(order)
+                })
+                    .then(r => {
+                        console.log(r);
+                        window.location = "/thankyou";
+                    });
+
+                // setTimeout(function() {
+                //     window.location = "/thankyou";
+                // }, (1 * 1000));
             }
         });
 };
@@ -143,12 +167,12 @@ var payWithCard = function (stripe, card, clientSecret) {
 // Shows a success message when the payment is complete
 var orderComplete = function (paymentIntentId) {
     loading(false);
-    document
-        .querySelector(".result-message a")
-        .setAttribute(
-            "href",
-            "https://dashboard.stripe.com/test/payments/" + paymentIntentId
-        );
+    // document
+    //     .querySelector(".result-message a")
+    //     .setAttribute(
+    //         "href",
+    //         "https://dashboard.stripe.com/test/payments/" + paymentIntentId
+    //     );
     document.querySelector(".result-message").classList.remove("hidden");
     document.querySelector("button").disabled = true;
 };

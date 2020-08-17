@@ -25,6 +25,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.databaseUserDetailsService = databaseUserDetailsService;
     }
 
+    @Autowired
+    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+            .authenticationProvider(daoAuthenticationProvider());
+    }
+
     @Bean
     public AuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider =
@@ -58,10 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/thankyou").permitAll()
                 .antMatchers("/checkout").permitAll()
                 .antMatchers("/process-order").permitAll()
-
-//                .antMatchers("/checkout").hasRole("USER")
-//                .antMatchers("/process-order").hasRole("USER")
-
+                .antMatchers("/complete-order").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
@@ -69,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
                 .loginPage("/login").permitAll()
                 .loginProcessingUrl("/authenticate").permitAll()
-//                .defaultSuccessUrl("/checkout")
+                .defaultSuccessUrl("/checkout")
                 .failureUrl("/login?error=true").permitAll()
                 .and()
 
@@ -82,12 +85,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-    }
-
-    @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .authenticationProvider(daoAuthenticationProvider());
     }
 
 }

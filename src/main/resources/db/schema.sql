@@ -1,5 +1,4 @@
 
--- CREATE USER ECOM IDENTIFIED BY password;
 
 CREATE TABLE ECOM.STORE_USER (
     user_id INTEGER GENERATED ALWAYS AS IDENTITY START WITH 1 INCREMENT BY 1,
@@ -57,16 +56,18 @@ CREATE TABLE ECOM.ITEM_CATEGORY (
 );
 CREATE TABLE ECOM.ORDERS (
     order_id INTEGER GENERATED ALWAYS AS IDENTITY START WITH 1 INCREMENT BY 1,
-    user_id INTEGER NOT NULL,
+    user_id INTEGER,
     cart_id INTEGER NOT NULL,
     final_order_total DECIMAL DEFAULT '0.0',
     ship_date DATE,
     tax DECIMAL DEFAULT '0.0',
+    payment_intent VARCHAR2(100),
     FOREIGN KEY (cart_id) REFERENCES ECOM.SHOPPING_CART(cart_id),
     FOREIGN KEY (user_id) REFERENCES ECOM.STORE_USER(user_id),
     PRIMARY KEY (order_id)
 );
 
+-- CREATE USER ECOM IDENTIFIED BY password;
 -- GRANT CREATE SESSION TO ECOM;
 -- GRANT SELECT, INSERT, UPDATE, DELETE ON ECOM.STORE_USER TO ECOM;
 -- GRANT CREATE TYPE TO ECOM;
@@ -74,6 +75,8 @@ CREATE TABLE ECOM.ORDERS (
 -- GRANT EXECUTE ANY TYPE TO ECOM;
 -- ALTER USER ADMIN QUOTA UNLIMITED ON DATA;
 -- ALTER USER ECOM QUOTA UNLIMITED ON DATA;
+
+
 INSERT INTO ECOM.STORE_USER (email, password) VALUES ('test@gmail.com', 'test');
 INSERT INTO ECOM.STORE_USER (email, password) VALUES ('test2@gmail.com', 'test2');
 SELECT * FROM ECOM.STORE_USER;
@@ -145,6 +148,66 @@ BEGIN
             total_out := total_out + item_price * ic_in(i);
         END;
     END LOOP;
+
+    UPDATE ECOM.shopping_cart SET curr_order_total = total_out WHERE cart_id = cartid_out;
+END;
+/
+
+DECLARE
+    uid INTEGER := -1;
+    il VARCHAR2(100) := '23, 24,';
+    ic VARCHAR2(100) := '12, 8,';
+    cid INTEGER;
+    tout DECIMAL;
+
+BEGIN
+    ECOM.createCartItems(uid, il, ic, cid, tout);
+    dbms_output.put_line('cart id: ' || cid);
+    dbms_output.put_line('cart total amount: ' || tout);
+
+END;
+/
+
+CREATE OR REPLACE PROCEDURE ECOM.createCartItems (uid_in IN INTEGER DEFAULT -1,
+                                        il_in IN VARCHAR2,
+                                        ic_in IN VARCHAR2,
+                                        cartid_out OUT INTEGER,
+                                        total_out OUT DECIMAL) IS
+BEGIN
+    IF uid_in = -1 THEN
+        DECLARE anon_uid INTEGER;
+        BEGIN
+            INSERT INTO ECOM.STORE_USER (email, password, user_role) VALUES ('anon', 'anon', 'ROLE_ANONYMOUS') RETURNING user_id INTO anon_uid;
+            INSERT INTO ECOM.shopping_cart (user_id, date_created) VALUES (anon_uid, CURRENT_DATE) RETURNING cart_id INTO cartid_out;
+        END;
+
+    ELSE
+        INSERT INTO ECOM.shopping_cart (user_id, date_created) VALUES (uid_in, CURRENT_DATE) RETURNING cart_id INTO cartid_out;
+    END IF;
+
+    total_out := 0;
+    /*il_in := il_in || ',';
+    ic_in := ic_in || ',';*/
+
+    DECLARE il_count INTEGER;
+    BEGIN
+        il_count := regexp_count(il_in, ',', 1);
+        FOR i IN 1 .. il_count LOOP
+            DECLARE
+                temp_il VARCHAR2(100);
+                temp_ic VARCHAR2(100);
+                item_price DECIMAL;
+            BEGIN
+                SELECT regexp_substr(il_in, '[^,]+', 1, i) INTO temp_il FROM DUAL;
+                SELECT regexp_substr(ic_in, '[^,]+', 1, i) INTO temp_ic FROM DUAL;
+
+                INSERT INTO ECOM.cart_items (cart_id, item_id, quantity) VALUES (cartid_out, temp_il, temp_ic);
+
+                SELECT unit_price INTO item_price FROM ECOM.item WHERE item_id = temp_il;
+                total_out := total_out + item_price * temp_ic;
+            END;
+        END LOOP;
+    END;
 
     UPDATE ECOM.shopping_cart SET curr_order_total = total_out WHERE cart_id = cartid_out;
 END;

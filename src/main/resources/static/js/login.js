@@ -14,6 +14,10 @@ function authenticate() {
     }).then(
         function (result) {
             console.log('res:' +JSON.stringify(result, null, 2));
+            // add login response handler in spring and catch here
+            setTimeout(function() {
+                document.getElementById("success-alert").style.display = "block";
+            }, (1 * 1000));
     });
 }
 function logout() {

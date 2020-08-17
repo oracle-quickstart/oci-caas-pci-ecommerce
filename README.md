@@ -7,34 +7,47 @@ PCI-Ecommerce is a PCI compliant website thats part of the Compliance as a Servi
 
 - Maven
 - Java
-    ```
-    Follow oci onboarding
-    ```
+- Intellij
+  - *Follow OCI on boarding*
 - Stripe API credentials
-    ```
-    Create stripe account or note private and public api keys
-    ```
+  - *Create stripe account*
+  - ***note private and public api keys***
 - OCI ATP credentials
-    ```
-    spin up oracle ATP database with configuration: ***check***
-    set admin password
-    create wallet with password and download
-    download SQLDeveloper
-    connect using cload wallet and admin credentials
-    follow schema
-    note ECOM user(non admin) credentials
-    ```
+  - *spin up oracle ATP database with admin password and other configuration*
+  - *create wallet with password and download*
+  - *download SQLDeveloper*
+  - *connect using cload wallet and admin credentials*
+  - *create database with schema*
+  - ***note ECOM user(non admin) credentials***
 
 ### Installation
 - `git clone`
+- Download wallet to secure location
 - Change the credentials in `.env.example`
+    ```bash
+    # stripe
+    STRIPE_PUBLISHABLE_KEY=pk_test_stripe_pub_key
+    STRIPE_SECRET_KEY=sk_test_secret_key
+    
+    # db
+    ORACLE_DB_NAME=db_name_high
+    ORACLE_DB_WALLET=/Users/user/path/to/wallet
+    ORACLE_DB_USER=schema_name
+    ORACLE_DB_PASS='schema_pass'
+    ```
 - Run locally for development using 
-    ```shell
+    ```bash
     . run.sh
     ```
 
+### Note
+- Tomcat and database connection ***do not*** work with VPN on
+- Live reload from dev-tools doesn't seem to work consistently on static files
+- Application has logging level and debug mode set in `application.properties
+
+
 ### Deployment
-> I've noted things I tested to move from default embedded to external tomcat 
+> Moving from development using embedded tomcat to creating a war deployable on an external server
 #### Code
 - Verify main to run as servlet on tomcat (not embedded)
     ```java
@@ -51,6 +64,9 @@ PCI-Ecommerce is a PCI compliant website thats part of the Compliance as a Servi
         }
     }
     ```
+- @TODO REMOVE DEBUG MODE
+- @TODO REMOVE DEBUG SETTINGS
+- @TODO ADD CUSTOM ERROR PAGE AND REMOVE STACK TRACE
 
 #### Maven
 - verify `pom.xml` has following
@@ -58,23 +74,23 @@ PCI-Ecommerce is a PCI compliant website thats part of the Compliance as a Servi
 - war will be named `${artifactId}-${version}`
 - update version eg. `<version>0.0.1-SNAPSHOT</version>` using [semantic versioning](semver.org)
 - verify spring-boot-starter-web excludes tomcat and that spring-boot-starter-tomcat is included with scope provided
-- ```xml
-        <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-  		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
-  ```
+    ```xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <exclusions>
+            <exclusion>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-tomcat</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-tomcat</artifactId>
+        <scope>provided</scope>
+    </dependency>
+    ```
 - > provided means tomcat is included in the runtime environment
 - clean and build new war using 
     ```shell

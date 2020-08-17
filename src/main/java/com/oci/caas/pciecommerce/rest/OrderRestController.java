@@ -19,12 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.math.BigDecimal;
+import java.util.*;
+
 import oracle.jdbc.*;
 
 @Controller
@@ -62,10 +60,14 @@ public class OrderRestController {
     static class CreatePaymentResponse {
         private String publishableKey;
         private String clientSecret;
+        private int cartId;
+        private long totalPayment;
 
-        public CreatePaymentResponse(String publishableKey, String clientSecret) {
+        public CreatePaymentResponse(String publishableKey, String clientSecret, int cartId, long totalPayment) {
             this.publishableKey = publishableKey;
             this.clientSecret = clientSecret;
+            this.cartId = cartId;
+            this.totalPayment = totalPayment;
         }
 
         public String getClientSecret() {
@@ -80,9 +82,23 @@ public class OrderRestController {
         public void setPublishableKey(String publishableKey) {
             this.publishableKey = publishableKey;
         }
+        public int getCartId() {
+            return cartId;
+        }
+        public void setCartId(int cartId) {
+            this.cartId = cartId;
+        }
+
+        public long getTotalPayment() {
+            return totalPayment;
+        }
+
+        public void setTotalPayment(long totalPayment) {
+            this.totalPayment = totalPayment;
+        }
     }
 
-    private double calculateOrderAmount(ItemOrder[] items) {
+    private long getUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object myUser = (auth != null) ? auth.getPrincipal() :  null;
 
@@ -91,81 +107,103 @@ public class OrderRestController {
             User user = (User) myUser;
             uid = user.getUser_id();
         }
+        return uid;
+    }
+
+    private Object[] calculateOrderAmount(ItemOrder[] items) {
+
+        long uid = getUserId();
 
         int itemCount = items.length;
-        int[] il_in = new int[itemCount];
-        int[] ic_in = new int[itemCount];
-        ArrayList<Integer> il = new ArrayList<Integer>(itemCount);
-        ArrayList<Integer> ic = new ArrayList<Integer>(itemCount);
+        List<String> il = new ArrayList<String>(itemCount);
+        List<String> ic = new ArrayList<String>(itemCount);
 
-        double total = 0;
         for (int i = 0; i < itemCount; i++) {
-//            il_in[i] = (int) items[i].getId();
-            il.add((int) items[i].getId());
-//            ic_in[i] = items[i].getCount();
-            ic.add(items[i].getCount());
-
-            total += items[i].getPrice() * items[i].getCount();
+            il.add(String.valueOf(items[i].getId()));
+            ic.add(String.valueOf(items[i].getCount()));
         }
-
-//        System.out.println("total " + total);
-//        for (int i: il) {
-//            System.out.println("il: " + i);
-//        }
-//        for (int j: ic) {
-//            System.out.println("ic: " + j);
-//        }
+        String il_str = String.join(",", (List) il) + ",";
+        String ic_str = String.join(",", (List) ic) + ",";
 
         SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("createCart")
+                .withProcedureName("createCartItems")
                 .declareParameters(
                         new SqlParameter("uid_in", OracleTypes.INTEGER),
-                        new SqlParameter("il_in", OracleTypes.ARRAY, "ECOM.ItemIds"),
-                        new SqlParameter("ic_in", OracleTypes.ARRAY, "ECOM.ItemCounts"),
+                        new SqlParameter("il_in", OracleTypes.VARCHAR),
+                        new SqlParameter("ic_in", OracleTypes.VARCHAR),
                         new SqlOutParameter("cartid_out", OracleTypes.INTEGER),
                         new SqlOutParameter("total_out", OracleTypes.DECIMAL));
 
         Map<String, Object> inParamMap = new HashMap<String, Object>();
         inParamMap.put("uid_in", uid);
-        inParamMap.put("il_in", il);
-        inParamMap.put("ic_in", ic);
+        inParamMap.put("il_in", il_str);
+        inParamMap.put("ic_in", ic_str);
         SqlParameterSource in = new MapSqlParameterSource(inParamMap);
 
 
         Map<String, Object> rs = simpleJdbcCall.execute(in);
-//        System.out.println((int) rs.get("cartid_out"));
-//        System.out.println((double) rs.get("total_out"));
 
-//        Connection con = null;
-//        try {
-//            con = jdbcTemplate.getDataSource().getConnection();
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//        oracle.jdbc.OracleConnection oraConn = (oracle.jdbc.OracleConnection) con;
-//        java.sql.Array sqlArray = oraConn.createARRAY("typeName", array);
-
-        return total * 100;
+        return new Object[] {rs.get("cartid_out"), rs.get("total_out")};
     }
-
-
 
     @PostMapping(value = "/process-order", produces = "application/json")
     @ResponseBody
-    public TestRestController.CreatePaymentResponse secret(@RequestBody OrderBody postBody) throws StripeException {
+    public CreatePaymentResponse secret(@RequestBody OrderBody postBody) throws StripeException {
         String private_key = System.getenv("STRIPE_SECRET_KEY");
         String public_key = System.getenv("STRIPE_PUBLISHABLE_KEY");
         Stripe.apiKey = private_key;
 
+        Object[] ret = calculateOrderAmount(postBody.getItems());
+        long total = ((BigDecimal) ret[1]).longValue() * 100;
+        int cart_id = (int) ret[0];
 
         PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
                 .setCurrency("usd")
-                .setAmount(new Long((long) calculateOrderAmount(postBody.getItems())))
+                .setAmount(new Long(total))
                 .build();
 
         PaymentIntent intent = PaymentIntent.create(createParams);
 
-        TestRestController.CreatePaymentResponse paymentResponse = new TestRestController.CreatePaymentResponse(public_key, intent.getClientSecret());
+        CreatePaymentResponse paymentResponse =
+                new CreatePaymentResponse(public_key, intent.getClientSecret(), cart_id,total/100);
         return paymentResponse;
+    }
+
+    static class PaymentOrder {
+        private double cart_total;
+        private int cart_id;
+        private String payment_intent;
+        PaymentOrder(double cartTotal, int cart_id, String payment_intent) {
+            this.cart_total = cartTotal;
+            this.cart_id = cart_id;
+            this.payment_intent = payment_intent;
+        }
+        public int getCart_id() {
+            return cart_id;
+        }
+        public double getCart_total() {
+            return cart_total;
+        }
+        public String getPayment_intent() {
+            return payment_intent;
+        }
+    }
+
+    @PostMapping(value = "/complete-order", produces = "application/json")
+    @ResponseBody
+    public void secret(@RequestBody PaymentOrder postBody) {
+        long uid = getUserId();
+        if (uid != -1) {
+            String query = "INSERT INTO ORDERS (user_id, cart_id, final_order_total, payment_intent) VALUES (?, ?, ?, ?)";
+            jdbcTemplate.update(
+                    query,
+                    uid, postBody.getCart_id(), postBody.getCart_total(), postBody.getPayment_intent());
+        } else {
+            String query = "INSERT INTO ORDERS (cart_id, final_order_total, payment_intent) VALUES (?, ?, ?)";
+            jdbcTemplate.update(
+                    query,
+                    postBody.getCart_id(), postBody.getCart_total(), postBody.getPayment_intent());
+        }
+
     }
 }

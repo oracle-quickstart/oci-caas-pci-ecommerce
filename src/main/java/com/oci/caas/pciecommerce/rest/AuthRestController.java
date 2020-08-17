@@ -54,8 +54,9 @@ public class AuthRestController {
         }
     }
 
-    @PostMapping("/register")
-    public void register(@RequestBody authRequest req) {
+    @PostMapping(value = "/register", produces = "application/json")
+    @ResponseBody
+    public authResponse register(@RequestBody authRequest req) {
         String encodedPassword  = passwordEncoder.encode(req.getPassword());
         System.out.println("pwd: " + encodedPassword);
 
@@ -69,6 +70,7 @@ public class AuthRestController {
                 query,
                 new Object[]{user.getEmail(), user.getPassword(), user.getUser_role()}
         );
+        return new authResponse(user.getUsername(), user.getUser_role(), -1);
 
     }
 
