@@ -16,6 +16,18 @@
 <body class="text-center">
 <form id="login-form" class="form-signin">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <div class="alert alert-success collapse" id="loggedin-alert" role="alert">
+        You are logged in!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-danger collapse" role="alert" id="fail-alert">
+        Log in failed!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <img class="mb-4" src="images/clipart/logo.png" alt="..." width="72" height="72">
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 
@@ -42,13 +54,6 @@
             <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
         </svg>
     </a>
-
-    <div class="alert alert-success collapse" role="alert" id="success-alert">
-        Login successful!
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
 
 </form>
 

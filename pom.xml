@@ -19,22 +19,22 @@
 	</properties>
 
 	<dependencies>
-		
-		<!--spring boot starters-->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<!--run app on embedded tomcat-->
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -46,6 +46,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
@@ -62,7 +63,7 @@
 			<groupId>com.oracle.ojdbc</groupId>
 			<artifactId>ojdbc8</artifactId>
 			<version>19.3.0.0</version>
-<!--			<scope>runtime</scope>-->
+			<!--<scope>runtime</scope>-->
 			<!--exclude ons and simple fan to suppress warning-->
 			<exclusions>
 				<exclusion>
@@ -76,7 +77,6 @@
 			</exclusions>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
@@ -89,11 +89,10 @@
 			<version>19.24.0</version>
 		</dependency>
 
-
 	</dependencies>
-	<!--	
+
 	<packaging>war</packaging>
-	-->
+	
 	<build>
 		<!--
 		<resources>

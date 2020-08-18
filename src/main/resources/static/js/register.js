@@ -1,10 +1,11 @@
 let token = document.querySelector('input[name="_csrf"]').value
 document.getElementById("submit-btn").addEventListener("click", authenticate);
+let uname;
+
 function authenticate() {
-    let uname = document.getElementById("username").value;
+    uname = document.getElementById("username").value;
     let psw = document.getElementById("password").value;
     let user_auth = {username: uname, password: psw};
-    console.log(JSON.stringify(user_auth));
     fetch("/register", {
         method: "POST",
         headers: {
@@ -12,10 +13,14 @@ function authenticate() {
             'X-CSRF-Token': token
         },
         body: JSON.stringify(user_auth)
-    }).then(
-        function (result) {
-            console.log('res:' +JSON.stringify(result, null, 2));
+    })
+    .then(r => r.json())
+    .then(r => {
             //check if username is correct that is sent back or fail
-            document.getElementById("success-alert").style.display = "block";
+            if (r.username == uname) {
+                document.getElementById("success-alert").style.display = "block";
+            } else {
+                document.getElementById("fail-alert").style.display = "block";
+            }
         });
 }

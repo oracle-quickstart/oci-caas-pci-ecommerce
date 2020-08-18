@@ -1,12 +1,10 @@
 package com.oci.caas.pciecommerce.model;
 
-import org.springframework.context.annotation.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.xml.ws.RespectBinding;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -81,11 +79,6 @@ public class User implements UserDetails {
         final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
         return authorities;
     }
-
-//    @Override
-//    public String getPassword() {
-//        return null;
-//    }
 
     @Override
     public String getUsername() {

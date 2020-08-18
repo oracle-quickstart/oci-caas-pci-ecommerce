@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.math.BigDecimal;
 import java.util.*;
 
-import oracle.jdbc.*;
+import oracle.jdbc.OracleTypes;
 
 @Controller
 public class OrderRestController {
@@ -36,6 +36,14 @@ public class OrderRestController {
         private long id;
         private int count;
         private double price;
+
+        ItemOrder(String name, long id, int count, double price) {
+            this.name = name;
+            this.id = id;
+            this.count = count;
+            this.price = price;
+        }
+
         public double getPrice() {
             return price;
         }
@@ -88,11 +96,9 @@ public class OrderRestController {
         public void setCartId(int cartId) {
             this.cartId = cartId;
         }
-
         public long getTotalPayment() {
             return totalPayment;
         }
-
         public void setTotalPayment(long totalPayment) {
             this.totalPayment = totalPayment;
         }
