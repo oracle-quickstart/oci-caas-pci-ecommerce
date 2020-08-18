@@ -1,148 +1,60 @@
-# PCI Cat Shop
+# Project name
 
-PCI-Ecommerce is a PCI compliant website thats part of the Compliance as a Service MVP.
+<!--- These are examples. See https://shields.io for others or to customize this set of shields. You might want to include dependencies, project status and licence info here --->
+![GitHub repo size](https://img.shields.io/github/repo-size/scottydocs/README-template.md)
+![GitHub contributors](https://img.shields.io/github/contributors/scottydocs/README-template.md)
+![GitHub stars](https://img.shields.io/github/stars/scottydocs/README-template.md?style=social)
+![GitHub forks](https://img.shields.io/github/forks/scottydocs/README-template.md?style=social)
 
-## Getting Started
-### Prerequisites
+Project name is a `<utility/tool/feature>` that allows `<insert_target_audience>` to do `<action/task_it_does>`.
 
-- Maven
-- Java
-- Intellij
-  - *Follow OCI on boarding*
-- Stripe API credentials
-  - *Create stripe account*
-  - ***note private and public api keys***
-- OCI ATP credentials
-  - *spin up oracle ATP database with admin password and other configuration*
-  - *create wallet with password and download*
-  - *download SQLDeveloper*
-  - *connect using cload wallet and admin credentials*
-  - *create database with schema*
-  - ***note ECOM user(non admin) credentials***
+Additional line of information text about what the project does. Your introduction should be around 2 or 3 sentences. Don't go overboard, people won't read it.
 
-### Installation
-- `git clone`
-- Download wallet to secure location
-- Change the credentials in `.env.example`
-    ```bash
-    # stripe
-    STRIPE_PUBLISHABLE_KEY=pk_test_stripe_pub_key
-    STRIPE_SECRET_KEY=sk_test_secret_key
-    
-    # db
-    ORACLE_DB_NAME=db_name_high
-    ORACLE_DB_WALLET=/Users/user/path/to/wallet
-    ORACLE_DB_USER=schema_name
-    ORACLE_DB_PASS='schema_pass'
-    ```
-- Run locally for development using 
-    ```bash
-    . run.sh
-    ```
+## Prerequisites
 
-### Note
-- Tomcat and database connection ***do not*** work with VPN on
-- Live reload from dev-tools doesn't seem to work consistently on static files
-- Application has logging level and debug mode set in `application.properties
+Before you begin, ensure you have met the following requirements:
+<!--- These are just example requirements. Add, duplicate or remove as required --->
+* You have installed the latest version of `<coding_language/dependency/requirement_1>`
+* You have a `<Windows/Linux/Mac>` machine. State which OS is supported/which is not.
+* You have read `<guide/link/documentation_related_to_project>`.
 
+## Installation
 
-### Deployment
-> Moving from development using embedded tomcat to creating a war deployable on an external server
-#### Code
-- Verify main to run as servlet on tomcat (not embedded)
-    ```java
-    @SpringBootApplication
-    public class PciEcommerceApplication extends SpringBootServletInitializer {
+To install <project_name>, follow these steps:
 
-        public static void main(String[] args) {
-            SpringApplication.run(PciEcommerceApplication.class, args);
-        }
+Linux and macOS:
+```
+<install_command>
+```
 
-        @Override
-        protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-            return builder.sources(PciEcommerceApplication.class);
-        }
-    }
-    ```
-- @TODO REMOVE DEBUG MODE
-- @TODO REMOVE DEBUG SETTINGS
-- @TODO ADD CUSTOM ERROR PAGE AND REMOVE STACK TRACE
+## Usage
 
-#### Maven
-- verify `pom.xml` has following
-    `<packaging>war</packaging>`
-- war will be named `${artifactId}-${version}`
-- update version eg. `<version>0.0.1-SNAPSHOT</version>` using [semantic versioning](semver.org)
-- verify spring-boot-starter-web excludes tomcat and that spring-boot-starter-tomcat is included with scope provided
-    ```xml
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-        <exclusions>
-            <exclusion>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-tomcat</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-tomcat</artifactId>
-        <scope>provided</scope>
-    </dependency>
-    ```
-- > provided means tomcat is included in the runtime environment
-- clean and build new war using 
-    ```shell
-    mvn clean
-    mvn package
-    ```
-- > this should generate the package.war and package.war.original because maven does [repackaging](https://stackoverflow.com/questions/43641664/why-spring-boot-generates-jar-or-war-file-with-original-extension)
+To use <project_name>, follow these steps:
 
-#### Tomcat
-- configure `server.xml` for different port
-    ```xml
-    <Connector port="8081" protocol="HTTP/1.1"
-            connectionTimeout="20000"
-            redirectPort="8443" /> 
-    ```
-- add to `tomcat-users.xml`
-    ```xml
-    <role rolename="manager-gui"/>
-        <role rolename="manager-script"/>
-        <user username="admin" password="password" roles="manager-gui, manager-script"/>
-    </tomcat-users>
-    ```
-- > I added admin user when I was using the managing app on ROOT. May need this to access other admin servlets
-- > I tested changing `web.xml` default servlet mapping because it couldn't find static content but that didnt work
-- copy the war file to `/<tomcat>/webapps` folder
-- rename or delete default `/ROOT/` folder
-- rename war file to `ROOT.war`
-- in `/<tomcat>` folder run 
-    ```shell
-    bin/catalina.sh run
-    ```
-- view app on http://localhost:8081/
+```
+<usage_example>
+```
 
-
-#### Deploying Resources
-  - maven [snapshot](https://stackoverflow.com/questions/5901378/what-exactly-is-a-maven-snapshot-and-why-do-we-need-it)
-  - > Snapshot indicates in development before production release
-  - [servlet url](https://stackoverflow.com/questions/20405474/add-context-path-to-spring-boot-application)
-  - [servlet api calls](https://stackoverflow.com/questions/46280399/spring-boot-rest-controller-returns-404-when-deployed-on-external-tomcat-9-serve)
-  - > I couldnt load css and js (but it could load images) so I thought it was an issue finding static content. I tried changing application.properties and was going to add webmvcconfigure class`
-  - [static resources on tomcat](https://stackoverflow.com/questions/41190635/css-and-js-file-not-loading-while-deploying-war-file-on-apache-tomcat)
-  - > The endpoint calls were being made to `root/api` instead of `root/servlet/api`. Changing the default servlet worked.
-  - [default servlet](https://stackoverflow.com/questions/14223150/mapping-a-specific-servlet-to-be-the-default-servlet-in-tomcat)
-
-
-### Security
-- 
+Add run commands and examples you think users will find useful. Provide an options reference for bonus points!
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+<!--- If your README is long or you have some specific process or steps you want contributors to follow, consider creating a separate CONTRIBUTING.md file--->
+To contribute to <project_name>, follow these steps:
 
-Please make sure to update tests as appropriate.
+1. Fork this repository.
+2. Create a branch: `git checkout -b <branch_name>`.
+3. Make your changes and commit them: `git commit -m '<commit_message>'`
+4. Push to the original branch: `git push origin <project_name>/<location>`
+5. Create the pull request.
+
+Alternatively see the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+
+## Contributors
+
+Thanks to the following people who have contributed to this project:
+
+* [@name](https://github.com/)
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+
+[MIT](https://choosealicense.com/licenses/mit/).
