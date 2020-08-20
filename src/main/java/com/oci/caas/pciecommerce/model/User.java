@@ -9,6 +9,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Represents store user containing db fields stored
+ * about the user.
+ * Implements UserDetails required for UserDetailsService and contains
+ * all methods necessary to override.
+ */
 public class User implements UserDetails {
     private long user_id;
     private String email;

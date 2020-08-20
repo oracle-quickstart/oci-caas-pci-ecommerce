@@ -1,31 +1,48 @@
 # PCI Cat Shop
 
-PCI-Ecommerce is a PCI compliant website thats part of the Compliance as a Service MVP.
-
 ## Getting Started
 ### Prerequisites
 
 - Maven
 - Java
 - Intellij
-  - *Follow OCI on boarding*
+  - Follow OCI on boarding
 - Stripe API credentials
-  - *Create stripe account*
-  - ***note private and public api keys***
+  - Create stripe [account](https://dashboard.stripe.com/test/dashboard) and **note private and public api keys**
 - OCI ATP credentials
-  - *spin up oracle ATP database with admin password and other configuration*
-  - *create wallet with password and download*
-  - *download SQLDeveloper*
-  - *connect using cload wallet and admin credentials*
-  - *create database with schema*
-  - ***note ECOM user(non admin) credentials***
 
-- ssh tunnel doc
+### Database setup
+- Spin up oracle ATP database
+  - use oci-caas-client and oci-caas-pci terraform scripts to create the database
+  - database username is admin and password is output in the terminal
+- In the OCI console navigate to the ATP database and download the wallet
+- Unzip the wallet, update tnsnames.ora and add new entry for SSH tunnel connection
+    ```text
+    atpdb12d92_tunnel = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=localhost))(connect_data=(service_name=f4dxon4zoel2z2z_atpdb12d92_medium.atp.oraclecloud.com))(security=(ssl_server_cert_dn="CN=adwc.uscom-east-1.oraclecloud.com,OU=Oracle BMCS US,O=Oracle Corporation,L=Redwood City,ST=California,C=US")))
+    ```
+  - Note that the port and host are updated to connect to your SSH tunnel. The entry is named {databasename}_connectionname.
+  - ***Adding this entry allows for connnections (tomcat or sqldeveloper) to db while using an ssh tunnel. It must be running to connect.***
+- Create the ssh tunnel using the command
+    ```bash
+    # ssh -L 127.0.0.1:1522:{db_private_ip}:1522 opc@{bastion_public_ip}
+    ssh -L 127.0.0.1:1522:10.1.5.2:1522 opc@129.146.50.19
+    ```
+- Setting up the database schema
+  - Download [SQLDeveloper](https://www.oracle.com/database/technologies/appdev/sqldeveloper-landing.html)
+  - Create a new connection and input the connection name, admin username, and password. 
+  - For connection type, enter cloud wallet and select the downloaded cloud wallet
+  - Assuming the connection was created, open the `dump.sql` file located at `src/main/resources/db/`
+  - Change line 4 to a secure password and ***take note of it as ECOM user password***
+    ```sql
+    CREATE USER ECOM IDENTIFIED BY password;
+    ```
+  - Run the schema. It only adds item and category data.
+
 
 ### Installation
-- `git clone`
-- Download wallet to secure location
-- Change the credentials in `.env.example`
+The project repo is here: REPO_FQDN
+- `git clone REPO_FQDN`
+- Change the credentials in `.env.example` and copy or rename it to .env
     ```bash
     # stripe
     STRIPE_PUBLISHABLE_KEY=pk_test_stripe_pub_key
@@ -33,25 +50,29 @@ PCI-Ecommerce is a PCI compliant website thats part of the Compliance as a Servi
     
     # db
     ORACLE_DB_NAME=db_name_high
-    ORACLE_DB_WALLET=/Users/user/path/to/wallet
+    ORACLE_DB_WALLET=/Users/user/path/to/unzipwallet
     ORACLE_DB_USER=schema_name
     ORACLE_DB_PASS='schema_pass'
     ```
+    - note: the path to the wallet is the unzipped wallet with the tunnel entry
+- Create the ssh tunnel for db connection
 - Run locally for development using 
     ```bash
     . run.sh
     ```
 
 ### Note
+- Maven can not download dependencies on VPN
+- In Intellij, you must sync the Maven dependencies or it generate errors. The notification to sync shows up when it detects an import is needed or it can be triggered by modifying the pom (@TODO find out how to mannually trigger the sync/import)
 - Tomcat and database connection ***do not*** work with VPN on
-- Live reload from dev-tools doesn't seem to work consistently on static files
+- Live reload from dev-tools does not seem to work consistently on static files
 - Application has logging level and debug mode set in `application.properties
 
 
 ### Deployment
 > Moving from development using embedded tomcat to creating a war deployable on an external server
 #### Code
-- Verify main to run as servlet on tomcat (not embedded)
+- Verify main method in `PciEcommerceApplication.java` runs as servlet on tomcat (not embedded). If main doesn't look like this comment out entire main class and replace with this block. Import classes as needed.
     ```java
     @SpringBootApplication
     public class PciEcommerceApplication extends SpringBootServletInitializer {
@@ -94,7 +115,7 @@ PCI-Ecommerce is a PCI compliant website thats part of the Compliance as a Servi
     </dependency>
     ```
 - > provided means tomcat is included in the runtime environment
-- clean and build new war using 
+- clean and build new war in the `/target` directory using 
     ```shell
     mvn clean
     mvn package
@@ -140,11 +161,3 @@ PCI-Ecommerce is a PCI compliant website thats part of the Compliance as a Servi
 
 ### Security
 - 
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
