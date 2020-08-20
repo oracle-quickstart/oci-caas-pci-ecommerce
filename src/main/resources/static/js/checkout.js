@@ -1,18 +1,19 @@
 import ShoppingCart from './shoppingcart.js';
 
-// A reference to Stripe.js initialized with your real test publishable API key.
-let  stripe;
-
-// Disable the button until we have Stripe set up on the page
-document.querySelector("button").disabled = true;
 const token = document.querySelector('input[name="_csrf"]').value;
 const productList = document.getElementById("product-list");
+const button = document.querySelector("button");
+
+let  stripe;
 let cart = [];
 let cart_id = -1;
 let cart_total = 0;
 
 
 window.addEventListener('load', function () {
+
+    // Disable the button until we have Stripe set up on the page
+    button.disabled = true;
 
     let shoppingcart = new ShoppingCart(cart);
     if (sessionStorage.getItem("shoppingCart") != null) {
@@ -24,7 +25,10 @@ window.addEventListener('load', function () {
     let order = {
         'items' : shoppingcart.cart,
     };
-
+    if (shoppingcart.cart.length == 0) {
+        console.log("Empty cart exiting");
+        return;
+    }
     fetch("/process-order", {
 
         method: "POST",
@@ -67,7 +71,7 @@ window.addEventListener('load', function () {
 
             card.on("change", function (event) {
                 // Disable the Pay button if there are no card details in the Element
-                document.querySelector("button").disabled = event.empty;
+                button.disabled = event.empty;
                 document.querySelector("#card-errors").textContent = event.error ? event.error.message : "";
             });
 
@@ -172,7 +176,7 @@ var orderComplete = function (paymentIntentId) {
     //         "https://dashboard.stripe.com/test/payments/" + paymentIntentId
     //     );
     document.querySelector(".result-message").classList.remove("hidden");
-    document.querySelector("button").disabled = true;
+    button.disabled = true;
 };
 
 // Show the customer the error from Stripe if their card fails to charge
@@ -189,11 +193,11 @@ var showError = function (errorMsgText) {
 var loading = function (isLoading) {
     if (isLoading) {
         // Disable the button and show a spinner
-        document.querySelector("button").disabled = true;
+        button.disabled = true;
         document.querySelector("#spinner").classList.remove("hidden");
         document.querySelector("#button-text").classList.add("hidden");
     } else {
-        document.querySelector("button").disabled = false;
+        button.disabled = false;
         document.querySelector("#spinner").classList.add("hidden");
         document.querySelector("#button-text").classList.remove("hidden");
     }

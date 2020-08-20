@@ -1,4 +1,11 @@
 
+/*
+ * @TODO MAKE THIS A MODULE
+ * THIS SHOULD BE USING SHOPPING CART IN SEPERATE MODULE NOT DUPLICATE IT
+ * ISSUE: VARIABLES CONTAINING ELEMENTS NEED TO BE PASSED TO THE CART MODULE
+ * 
+*/
+
 // shopping cart modal toggle
 const cartBtn = document.getElementById("cart-btn");
 
@@ -13,7 +20,6 @@ const cartItems = document.querySelector(".total-count");
 const cartTotal = document.querySelector(".total-cart");
 const checkoutBtn = document.getElementById("checkout-btn");
 
-// clear car
 const clearCartBtn = document.querySelector(".clear-cart");
 
 const userDropDown = document.getElementById("user-dropdown");
@@ -29,7 +35,6 @@ const cartContent = document.querySelector(".cart-content");
 
 
 
-//cart
 let cart = [];
 
 //getting the products
@@ -60,7 +65,6 @@ class Categories {
     }
 }
 
-// display products
 class UI {
     displayProducts(products) {
         let result = "";
@@ -68,16 +72,15 @@ class UI {
             result += `
                 <div class="card">
                     <img class="card-img-top" src="/images/products/prod${product.item_id}.png" alt="Card image cap">
-                    <div class="card-body text-info">
+                    <div class="card-body text-info d-flex flex-column">
                         <h5 class="card-title">${product.name}</h5>
                         <p class="card-text">Price: $${product.unit_price}</p>
                         <button type="button"
                             data-id=${product.item_id}
                             data-name="${product.name}"
                             data-unit_price=${product.unit_price} 
-                            class="add-to-cart btn btn-primary">Add to cart
+                            class="add-to-cart btn btn-block btn-primary align-self-end">Add to cart
                         </button>
-                                       
                     </div>
                 </div>
             `;
@@ -85,7 +88,6 @@ class UI {
             result = "";
         });
 
-        // productsDOM.innerHTML = result;
     }
 }
 
@@ -229,7 +231,6 @@ class ShoppingCart {
         cart = [];
         this.saveCart();
     };
-
 
     printCart () {
         console.log(cart);

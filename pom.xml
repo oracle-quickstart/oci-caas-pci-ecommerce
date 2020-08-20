@@ -94,23 +94,13 @@
 	<packaging>war</packaging>
 	
 	<build>
-		<!--
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/application.properties</include>
-					<include>**/templates/**</include>
-					<include>**/static/**</include>
-				</includes>
-			</resource>
-		</resources>
-		-->
-
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+    				<addResources>true</addResources>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

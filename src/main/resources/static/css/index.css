@@ -18,7 +18,7 @@ html {
     transition: all 1s ease;
 }
 
-/** HEADING TOP SPACING **/
+/** heaging top spacing **/
 .products-heading {
     margin-top:40px;
     margin-bottom: 40px;
@@ -29,14 +29,17 @@ html {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .card-deck .card {
     max-width: 250px;
     min-width: 100px;
 }
-/*.carousel-inner > .item > img,*/
-/*.carousel-inner > .item > a > img {*/
-/*    max-height: 500px;    !* Set slide height here *!*/
-/*}*/
-/*.carousel-item img {*/
-/*    max-height: 500px; !* input your desired height here *!*/
-/*}*/
+
+/* make add to cart button align to buttom */
+.add-to-cart {
+    margin-top: auto;
+}
+.carousel-caption {
+    top: 50%;
+}
+
