@@ -1,11 +1,12 @@
 package com.oci.caas.pciecommerce.rest;
 
-
 import com.oci.caas.pciecommerce.model.User;
+
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -25,12 +26,23 @@ import java.util.*;
 
 import oracle.jdbc.OracleTypes;
 
+/**
+ * Rest Controller to receive requests related orders.
+ * Includes controller to create a shopping cart and submitting
+ * a payment to Stripe and saving it to database.
+ */
 @Controller
 public class OrderRestController {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    /**
+     * Represents the individual item in the shopping cart
+     * Contained within the ItemOrderArray class that is received
+     * on the /process-order call
+     * @TODO Use the Item class instead of static class
+     */
     static class ItemOrder {
         private String name;
         private long id;
@@ -58,13 +70,23 @@ public class OrderRestController {
         }
     }
 
-    static class OrderBody {
+    /**
+     * Represents the shopping cart itself that is received on
+     * the /process-order call to create the cart
+     */
+    static class ItemOrderArray {
         private ItemOrder[] items;
         public ItemOrder[] getItems() {
             return items;
         }
     }
 
+    /**
+     * Represents the json object to return from the /process-order
+     * call. Contains the public stripe key to create the token,
+     * client secret to confirm stripe payment, cart id, and total payment
+     * for this transaction.
+     */
     static class CreatePaymentResponse {
         private String publishableKey;
         private String clientSecret;
@@ -104,6 +126,11 @@ public class OrderRestController {
         }
     }
 
+    /**
+     * Helper method to get the user id of the current user
+     * or return -1 if there is no user logged in.
+     * @return long uid of the user logged in
+     */
     private long getUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object myUser = (auth != null) ? auth.getPrincipal() :  null;
@@ -116,6 +143,12 @@ public class OrderRestController {
         return uid;
     }
 
+    /**
+     * Calculates the total amount of the order by calling the createCartItems
+     * stored proc which allows for insertion into the shopping cart table.
+     * @param items ItemOrder[] to convert into comma delimited string of id and count
+     * @return Object[] of cart id and calculated total amount
+     */
     private Object[] calculateOrderAmount(ItemOrder[] items) {
 
         long uid = getUserId();
@@ -152,9 +185,17 @@ public class OrderRestController {
         return new Object[] {rs.get("cartid_out"), rs.get("total_out")};
     }
 
+    /**
+     * Receives /process-order which creates the shopping cart in the database,
+     * contacts stripe to create payment intent, and returns cart amount and
+     * the client secret allowing for payment.
+     * @param postBody
+     * @return
+     * @throws StripeException
+     */
     @PostMapping(value = "/process-order", produces = "application/json")
     @ResponseBody
-    public CreatePaymentResponse secret(@RequestBody OrderBody postBody) throws StripeException {
+    public CreatePaymentResponse secret(@RequestBody ItemOrderArray postBody) throws StripeException {
         String private_key = System.getenv("STRIPE_SECRET_KEY");
         String public_key = System.getenv("STRIPE_PUBLISHABLE_KEY");
         Stripe.apiKey = private_key;
@@ -175,10 +216,15 @@ public class OrderRestController {
         return paymentResponse;
     }
 
+    /**
+     * Represent the json sent to /complete-order containing
+     * cart total amount, cart id, and payment intent id.
+     */
     static class PaymentOrder {
         private double cart_total;
         private int cart_id;
         private String payment_intent;
+
         PaymentOrder(double cartTotal, int cart_id, String payment_intent) {
             this.cart_total = cartTotal;
             this.cart_id = cart_id;
@@ -195,6 +241,13 @@ public class OrderRestController {
         }
     }
 
+    /**
+     * Receives the /complete order call on successful payment
+     * to insert an order in the database.
+     * If it is a user checkout, then pass an id to the query,
+     * if not pass in null and infer the guest user from the shopping cart.
+     * @param postBody
+     */
     @PostMapping(value = "/complete-order", produces = "application/json")
     @ResponseBody
     public void secret(@RequestBody PaymentOrder postBody) {

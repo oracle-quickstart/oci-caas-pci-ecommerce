@@ -9,7 +9,10 @@ let cart = [];
 let cart_id = -1;
 let cart_total = 0;
 
-
+/**
+ * Setup shopping cart and initiate order by calling
+ * /process-order to get client secret and public key.
+ */
 window.addEventListener('load', function () {
 
     // Disable the button until we have Stripe set up on the page
@@ -22,15 +25,13 @@ window.addEventListener('load', function () {
     }
     loadUI(shoppingcart);
 
-    let order = {
-        'items' : shoppingcart.cart,
-    };
     if (shoppingcart.cart.length == 0) {
         console.log("Empty cart exiting");
         return;
     }
-    fetch("/process-order", {
 
+    let order = {'items' : shoppingcart.cart};
+    fetch("/process-order", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -38,9 +39,7 @@ window.addEventListener('load', function () {
         },
         body: JSON.stringify(order)
     })
-        .then(function (result) {
-            return result.json();
-        })
+        .then(result => result.json())
         .then(function (data) {
             stripe = Stripe(data.publishableKey);
             cart_id = data.cartId;
@@ -88,12 +87,17 @@ window.addEventListener('load', function () {
                     // Complete payment when the submit button is clicked
                     payWithCard(stripe, card, data.clientSecret);
 
+                    // clearing the cart here doesnt work, maybe bc of scope
+                    // shoppingcart.clearCart();
                 }
             });
         });
 
 }, false);
 
+/**
+ *
+ */
 function loadUI(shoppingcart) {
     let result = "";
     shoppingcart.cart.forEach(product => {
@@ -118,10 +122,11 @@ function loadUI(shoppingcart) {
 }
 
 
-
-// Calls stripe.confirmCardPayment
-// If the card requires authentication Stripe shows a pop-up modal to
-// prompt the user to enter authentication details without leaving your page.
+/**
+ * Calls stripe.confirmCardPayment
+ * If the card requires authentication Stripe shows a pop-up modal to
+ * prompt the user to enter authentication details without leaving your page.
+ */
 var payWithCard = function (stripe, card, clientSecret) {
     loading(true);
     stripe
@@ -130,7 +135,6 @@ var payWithCard = function (stripe, card, clientSecret) {
                 card: card
             }
         })
-
         .then(function (result) {
             if (result.error) {
                 // Show error to your customer
@@ -153,33 +157,31 @@ var payWithCard = function (stripe, card, clientSecret) {
                     body: JSON.stringify(order)
                 })
                     .then(r => {
-                        console.log(r);
                         window.location = "/thankyou";
                     });
 
-                // setTimeout(function() {
-                //     window.location = "/thankyou";
-                // }, (1 * 1000));
             }
         });
 };
 
-/* ------- UI helpers ------- */
+/** ------- UI helpers ------- */
 
-// Shows a success message when the payment is complete
+/**
+ * Shows a success message when the payment is complete
+ */
 var orderComplete = function (paymentIntentId) {
     loading(false);
-    // document
-    //     .querySelector(".result-message a")
-    //     .setAttribute(
-    //         "href",
-    //         "https://dashboard.stripe.com/test/payments/" + paymentIntentId
-    //     );
+    /*document.querySelector(".result-message a").setAttribute(
+    "href",
+    "https://dashboard.stripe.com/test/payments/" + paymentIntentId
+    );*/
     document.querySelector(".result-message").classList.remove("hidden");
     button.disabled = true;
 };
 
-// Show the customer the error from Stripe if their card fails to charge
+/**
+ * Show the customer the error from Stripe if their card fails to charge
+ */
 var showError = function (errorMsgText) {
     loading(false);
     var errorMsg = document.querySelector("#card-errors");
@@ -189,7 +191,9 @@ var showError = function (errorMsgText) {
     }, 4000);
 };
 
-// Show a spinner on payment submission
+/**
+ * Show a spinner on payment submission
+ */
 var loading = function (isLoading) {
     if (isLoading) {
         // Disable the button and show a spinner
