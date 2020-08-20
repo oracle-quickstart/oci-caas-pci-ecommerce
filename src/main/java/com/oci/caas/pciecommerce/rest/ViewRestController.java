@@ -28,12 +28,12 @@ public class ViewRestController {
 
     @GetMapping("/")
     public String index() {
-        return "landing";
+        return "index";
     }
 
     @GetMapping("/landing")
     public String landing() {
-        return "landing";
+        return "index";
     }
 
     @GetMapping("/thankyou")

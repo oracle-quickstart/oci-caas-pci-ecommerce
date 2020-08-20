@@ -29,7 +29,10 @@ html {
     background-repeat: no-repeat;
     background-size: cover;
 }
-
+.card-deck .card {
+    max-width: 250px;
+    min-width: 100px;
+}
 /*.carousel-inner > .item > img,*/
 /*.carousel-inner > .item > a > img {*/
 /*    max-height: 500px;    !* Set slide height here *!*/
