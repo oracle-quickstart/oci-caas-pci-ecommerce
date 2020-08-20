@@ -1,13 +1,11 @@
 import ShoppingCart from './shoppingcart.js';
 
 // A reference to Stripe.js initialized with your real test publishable API key.
-var stripe = Stripe("pk_test_51GvaDaLTDDKKwjCcXOK5n086No6K8pqJlYaZuq5JJNfa51ahKZBmDU5nMa3TJIEkXfpKmjy66sIK6TWoazK9ORXm00tBy6WWNG");
-
+let  stripe;
 
 // Disable the button until we have Stripe set up on the page
 document.querySelector("button").disabled = true;
-let token = document.querySelector('input[name="_csrf"]').value;
-
+const token = document.querySelector('input[name="_csrf"]').value;
 const productList = document.getElementById("product-list");
 let cart = [];
 let cart_id = -1;
@@ -40,7 +38,7 @@ window.addEventListener('load', function () {
             return result.json();
         })
         .then(function (data) {
-
+            stripe = Stripe(data.publishableKey);
             cart_id = data.cartId;
             cart_total = data.totalPayment;
 
