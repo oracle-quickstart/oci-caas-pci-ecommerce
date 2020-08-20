@@ -11,12 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Handler that serves all product information and category information.
+ */
 @RestController
 public class ProductRestController {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    /**
+     * Gets all products and returns all of them ordered by their category id.
+     * @return list of items in json
+     */
     @GetMapping(value = "/products", produces = "application/json")
     public List<Item> products() {
         String query = "SELECT item_id, name, unit_price, stock, description, main_category from Item order by main_category";
@@ -24,6 +31,11 @@ public class ProductRestController {
         return itemList;
     }
 
+    /**
+     * Gets all categories that are being used by products. If it
+     * contain no products, they are ignored.
+     * @return list of categories in json
+     */
     @GetMapping(value = "/categories", produces = "application/json")
     public List<Category> categories() {
         String query = "select distinct main_category, category_name from item, category " +

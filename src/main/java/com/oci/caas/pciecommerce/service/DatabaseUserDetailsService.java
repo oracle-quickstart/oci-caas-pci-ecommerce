@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service required for Spring to manage UserDetails
+ */
 @Service
 public class DatabaseUserDetailsService implements UserDetailsService {
 
@@ -21,13 +24,23 @@ public class DatabaseUserDetailsService implements UserDetailsService {
         super();
     }
 
+    /**
+     * Only required method for UserDetailsService to find users by their unique username.
+     * My usernames are not unique so returning the first user name is the
+     * temporary workaround.
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String query = "SELECT user_id, email, password, user_role FROM STORE_USER WHERE email = ? AND user_role = 'ROLE_USER'";
+        String query =
+                "SELECT user_id, email, password, user_role FROM STORE_USER WHERE email = ? AND user_role = 'ROLE_USER'";
         List<User> personList = jdbcTemplate.query(query, new Object[] { username }, new UserRowMapper());
-        for (User u : personList) {
+        /*for (User u : personList) {
             System.out.println(u);
-        }
+        }*/
+
         if (personList.size() == 0) {
             throw new UsernameNotFoundException("User not found.");
         }

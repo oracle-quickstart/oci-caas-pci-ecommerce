@@ -9,19 +9,16 @@
 // shopping cart modal toggle
 const cartBtn = document.getElementById("cart-btn");
 
-// insert items
-const productsDOM = document.getElementById("categ-1");
-
 // add to cart list
 const showCart = document.querySelector(".show-cart");
 const cartItems = document.querySelector(".total-count");
 
-// in modal
+// shopping cart modal
 const cartTotal = document.querySelector(".total-cart");
 const checkoutBtn = document.getElementById("checkout-btn");
-
 const clearCartBtn = document.querySelector(".clear-cart");
 
+// profile dropdown
 const userDropDown = document.getElementById("user-dropdown");
 const loginBtn = document.getElementById("login-btn");
 const logoutBtn = document.getElementById("logout-btn");
@@ -30,14 +27,10 @@ const token = document.querySelector('input[name="_csrf"]').value;
 const closeCartBtn = document.querySelector(".close-cart");
 const cartDOM = document.querySelector(".cart");
 const cartOverlay = document.querySelector(".cart-overlay");
-
 const cartContent = document.querySelector(".cart-content");
-
-
 
 let cart = [];
 
-//getting the products
 class Products {
     async getProducts() {
         try {
@@ -103,12 +96,10 @@ class Item {
 
 class ShoppingCart {
 
-    // Save cart
     saveCart() {
         sessionStorage.setItem("shoppingCart", JSON.stringify(cart));
     }
 
-    // Load cart
     loadCart() {
         if (sessionStorage.getItem("shoppingCart") != null) {
             cart = JSON.parse(sessionStorage.getItem("shoppingCart"));
@@ -250,7 +241,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (currUser.username == "Guest") {
             logoutBtn.style.display = 'none';
             loginBtn.style.display = 'block';
-
         } else {
             logoutBtn.style.display = 'block';
             loginBtn.style.display = 'none';
@@ -296,15 +286,15 @@ function addEventListeners () {
 
         console.log("in showcart: " + name);
         if (event.target.className.includes("delete-item")) {
-            console.log("in del");
+            // console.log("in del");
             shoppingcart.removeItemFromCartAll(name);
         }
         else if (event.target.className.includes("minus-item")) {
-            console.log("in minus");
+            // console.log("in minus");
             shoppingcart.removeItemFromCart(name);
         }
         else if (event.target.className.includes("plus-item")) {
-            console.log("in plus");
+            // console.log("in plus");
             let price = item.dataset.price;
             shoppingcart.addItemToCart(id, name, price, 1);
         }

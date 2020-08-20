@@ -9,6 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller that deals with all user or auth functions.
+ * Registering requires injected password encoder.
+ * @TODO add custom login success and failure handlers
+ */
 @Controller
 public class AuthRestController {
 
@@ -18,6 +23,10 @@ public class AuthRestController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    /**
+     * Represents user auth containing minimal information.
+     * Used to retrieve info on who is logged in.
+     */
     static class authResponse {
         private String username;
         private String user_role;
@@ -39,6 +48,10 @@ public class AuthRestController {
         }
     }
 
+    /**
+     * Represents new user's registration request sent on
+     * /register post.
+     */
     static class authRequest {
         private String username;
         private String password;
@@ -54,11 +67,17 @@ public class AuthRestController {
         }
     }
 
+    /**
+     * Creates new user in db from username and bcrypt hashed password
+     * Does not return the user id becuause the insert statement returns nothing
+     * @TODO check if username is unique and return error message on failure
+     * @param req authRequest
+     * @return authResponse
+     */
     @PostMapping(value = "/register", produces = "application/json")
     @ResponseBody
     public authResponse register(@RequestBody authRequest req) {
         String encodedPassword  = passwordEncoder.encode(req.getPassword());
-        System.out.println("pwd: " + encodedPassword);
 
         User user = new User();
         user.setPassword(encodedPassword);
@@ -74,6 +93,10 @@ public class AuthRestController {
 
     }
 
+    /**
+     * Gets the current user if there is one logged in, Guest otherwise
+     * @return authResponse
+     */
     @GetMapping(value = "/currentUser", produces = "application/json")
     @ResponseBody
     public authResponse currentUser() {
@@ -82,7 +105,7 @@ public class AuthRestController {
 
         if (myUser instanceof User) {
             User user = (User) myUser;
-            System.out.println(user.getUsername());
+            //System.out.println(user.getUsername());
             return new authResponse(user.getUsername(), user.getUser_role(), user.getUser_id());
         }
 
