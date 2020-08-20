@@ -15,9 +15,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+/**
+ * Handler used for testing of templating (through /greeting)
+ * and stripe api (through /payment)
+ */
 @Controller
 public class TestRestController {
 
+    /**
+     *
+     */
     static class CreatePaymentBody {
         private Object[] items;
         private String currency;
@@ -29,6 +36,9 @@ public class TestRestController {
         }
     }
 
+    /**
+     *
+     */
     static class CreatePaymentResponse {
         private String publishableKey;
         private String clientSecret;
@@ -52,6 +62,11 @@ public class TestRestController {
         }
     }
 
+    /**
+     *
+     * @param items
+     * @return
+     */
     static int calculateOrderAmount(Object[] items) {
         // Replace this constant with a calculation of the order's amount
         // Calculate the order total on the server to prevent
@@ -62,6 +77,12 @@ public class TestRestController {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    /**
+     *
+     * @param name
+     * @param model
+     * @return
+     */
     @GetMapping("/greeting")
     public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) {
         String query = "Select personid, firstname, lastname from persons";
@@ -78,6 +99,12 @@ public class TestRestController {
         return "greeting";
     }
 
+    /**
+     *
+     * @param postBody
+     * @return
+     * @throws StripeException
+     */
     @PostMapping(value = "/create-payment-intent", produces = "application/json")
     @ResponseBody
     public CreatePaymentResponse secret(@RequestBody CreatePaymentBody postBody) throws StripeException {

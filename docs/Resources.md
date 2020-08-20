@@ -16,6 +16,12 @@ For further reference, please consider the following sections:
 * [Thymeleaf](https://docs.spring.io/spring-boot/docs/2.3.1.RELEASE/reference/htmlsingle/#boot-features-spring-mvc-template-engines)
 * [Spring Web](https://docs.spring.io/spring-boot/docs/2.3.1.RELEASE/reference/htmlsingle/#boot-features-developing-web-applications)
 
+### Relevant Articles
+* [Spring Actuator](https://spring.io/guides/gs/actuator-service/)
+* [Inversion of Control](https://martinfowler.com/articles/injection.html#InversionOfControl)
+* [Spring Security Guides](https://www.baeldung.com/security-spring)
+* [Deployable War](https://docs.spring.io/spring-boot/docs/2.1.2.RELEASE/reference/html/howto-traditional-deployment.html)
+
 ### Guides
 The following guides illustrate how to use some features concretely:
 

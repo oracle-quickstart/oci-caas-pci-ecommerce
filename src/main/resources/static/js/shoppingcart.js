@@ -74,8 +74,44 @@ export default class ShoppingCart {
         this.saveCart();
     }
 
+    // Remove all items from cart
+    removeItemFromCartAll (name) {
+        for (var item in this.cart) {
+            if (cart[item].name === name) {
+                cart.splice(item, 1);
+                break;
+            }
+        }
+        this.saveCart();
+        cartItems.innerHTML = this.totalCount();
+
+    };
+
+    setCountForItem(name, count) {
+        for (var i in this.cart) {
+            if (this.cart[i].name === name) {
+                this.cart[i].count = count;
+                break;
+            }
+        }
+    };
+
+    clearCart () {
+        cart = [];
+        this.saveCart();
+    };
+
     printCart () {
         console.log(this.cart);
     }
 
+}
+
+class Item {
+    constructor(id, name, price, count) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.count = count;
+    }
 }

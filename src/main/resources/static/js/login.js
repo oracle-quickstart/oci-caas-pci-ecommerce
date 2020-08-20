@@ -1,6 +1,8 @@
+
 let token = document.querySelector('input[name="_csrf"]').value;
 let loginForm = document.getElementById("login-form");
 let uname;
+
 function authenticate() {
     fetch("/authenticate", {
         method: "POST",
@@ -56,12 +58,9 @@ async function getCurrUser() {
 document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("submit-btn").addEventListener("click", authenticate);
-    // document.getElementById("logout-btn").addEventListener("click", logout);
-    
-    getCurrUser().then(currUser => {
-        if (currUser.username == "Guest") {
 
-        } else {
+    getCurrUser().then(currUser => {
+        if (currUser.username != "Guest")  {
             document.getElementById("submit-btn").disabled = true;
             document.getElementById("inputEmail").disabled = true;
             document.getElementById("inputPassword").disabled = true;

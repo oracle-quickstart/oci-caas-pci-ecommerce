@@ -3,6 +3,12 @@ package com.oci.caas.pciecommerce.rest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * Handler that serves views and maps endpoints to pages.
+ * Each string returned corresponds to an html page or template.
+ * @TODO consider using view resolver instead of controller
+ *
+ */
 @Controller
 public class ViewRestController {
 
@@ -28,12 +34,12 @@ public class ViewRestController {
 
     @GetMapping("/")
     public String index() {
-        return "landing";
+        return "index";
     }
 
     @GetMapping("/landing")
     public String landing() {
-        return "landing";
+        return "index";
     }
 
     @GetMapping("/thankyou")
