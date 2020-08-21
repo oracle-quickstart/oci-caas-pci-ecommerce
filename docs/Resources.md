@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'com.oci.caas.pci-ecommerce' is invalid and this project uses 'com.oci.caas.pciecommerce' instead.
+* The original package name of this project is 'com.oci.caas.pciecommerce'.
 
 # Getting Started
 
@@ -21,6 +21,7 @@ For further reference, please consider the following sections:
 * [Inversion of Control](https://martinfowler.com/articles/injection.html#InversionOfControl)
 * [Spring Security Guides](https://www.baeldung.com/security-spring)
 * [Deployable War](https://docs.spring.io/spring-boot/docs/2.1.2.RELEASE/reference/html/howto-traditional-deployment.html)
+* [Wallet Connection](#https://docs.oracle.com/en/cloud/paas/atp-cloud/atpug/connect-jdbc-thin-wallet.html#GUID-5ED3C08C-1A84-4E5A-B07A-A5114951AA9E)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
