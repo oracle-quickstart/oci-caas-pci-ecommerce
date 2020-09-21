@@ -37,6 +37,11 @@ public class ViewRestController {
         return "index";
     }
 
+    @GetMapping("/about")
+    public String about() {
+        return "about";
+    }
+
     @GetMapping("/landing")
     public String landing() {
         return "index";
