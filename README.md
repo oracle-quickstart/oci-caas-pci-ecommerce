@@ -53,8 +53,8 @@ Alternatively see the GitHub documentation on [creating a pull request](https://
 
 Thanks to the following people who have contributed to this project:
 
-* [@name](https://github.com/)
+* Arjun Patel
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/).
+[UPL](https://opensource.org/licenses/UPL)
