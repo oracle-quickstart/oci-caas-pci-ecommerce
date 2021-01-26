@@ -14,6 +14,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static org.springframework.web.servlet.function.RequestPredicates.headers;
+
 /**
  * Configuration managing security through setting UserDetailService,
  * authentication provider, password encoder, and managing endpoints.
@@ -97,7 +99,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
             .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .and()
+
+            .headers()
+                .contentSecurityPolicy("script-src 'self' https://js.stripe.com; connect-src https://js.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com");
     }
 
 }
