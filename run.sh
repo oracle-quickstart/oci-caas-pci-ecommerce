@@ -1,7 +1,7 @@
 # .env loading in the shell
 dotenv () {
   set -a
-  [ -f .env ] && . .env
+  [ -f .env ] && source .env
   set +a
 }
 
