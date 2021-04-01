@@ -103,7 +103,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
             .headers()
-                .contentSecurityPolicy("script-src 'self' https://js.stripe.com; connect-src https://js.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com");
-    }
+                .contentSecurityPolicy("script-src 'self' https://js.stripe.com; connect-src 'self'; frame-src https://js.stripe.com https://hooks.stripe.com");
 
+    }
 }
