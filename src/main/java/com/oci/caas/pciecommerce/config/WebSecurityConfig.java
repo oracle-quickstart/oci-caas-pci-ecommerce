@@ -100,13 +100,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                .and();
+                .and()
 
-            /*
             .headers()
-                .contentSecurityPolicy("script-src 'self' https://js.stripe.com; connect-src https://js.stripe.com " +
-                        "http://localhost:8080/**; frame-src https://js.stripe.com https://hooks.stripe.com");
-             */
+                .contentSecurityPolicy("script-src 'self' https://js.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com");
+
 
 
     }
