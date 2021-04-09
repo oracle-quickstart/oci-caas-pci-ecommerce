@@ -74,7 +74,7 @@ Follwing are steps to set up the database schema:
 
 2. For connection type, enter cloud wallet and select the downloaded cloud wallet
 
-<img src="database_setup.jpg" style="height: 400px; width:400px;"/>
+![database_setup](<images/database_setup.jpg>)
 
 3. After the connection is successfully created, open the <b>dump.sql</b> from src/main/resources/db/
 
