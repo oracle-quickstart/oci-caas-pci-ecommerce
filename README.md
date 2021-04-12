@@ -31,9 +31,9 @@ Folow the steps below to get the public and private API keys from Stripe:
 Clone the repository from Github:
 
 ```
-​    $ git clone https://github.com/oracle-quickstart/oci-caas-pci-ecommerce.git
+​   git clone https://github.com/oracle-quickstart/oci-caas-pci-ecommerce.git
 
-​    $ cd oci-caas-ecommerce
+​   cd oci-caas-ecommerce
 ```
 
 ## Database setup
@@ -43,7 +43,7 @@ Before you can run the OCI CAAS ECOMMERCE app you'll need spin up the oracle ATP
 To view the database password, go to the directory where you ran the oci-caas-client and run the following:
 
 ```
-​    $ terraform show
+​   terraform show
 ```
 
 The database username is <b>admin</b> and password is output in the terminal
@@ -59,7 +59,14 @@ Note: By default the filename is: Wallet_databasename.zip. You can save this fil
 
 ## Setting up the SSH tunnel
 
- Once you downloaded the Wallet, unzip the folder and update <b>tnsnames.ora</b> to add the following new entry for SSH tunnel connection
+Once you downloaded the Wallet, unzip the folder. 
+
+```
+​ unzip wallet_name.zip
+```
+
+Update <b>tnsnames.ora</b> to add the following new entry for SSH tunnel connection
+
 
 ```
 
@@ -70,11 +77,16 @@ atpdb12d92_tunnel = (description= (retry_count=20)(retry_delay=3)(address=(proto
 Note that the port and host are updated to connect to your SSH tunnel. The entry is named {databasename}_connectionname. Adding this entry allows for connections to the database while using an ssh tunnel. It must be running to connect.
 
 Once you have made the changes to tsnames.ora file, zip the folder back up and save it.
+Use the following command to zip the folder:
+
+```
+​ zip -r output_wallet_name.zip wallet_folder_name
+```
 
 To create and run the ssh tunnel use the following command:
 
 ```
-​    $ ssh -L 127.0.0.1:1522:{db_private_ip}:1522 opc@{bastion_public_ip}
+​  ssh -L 127.0.0.1:1522:{db_private_ip}:1522 opc@{bastion_public_ip}
 ```
 
 ## Setting up the database schema
@@ -92,7 +104,7 @@ Following are steps to set up the database schema:
 4. Change line 4 to a secure password and take note of it as ECOM user password. Note you are doing this to change the default password to a strong and a secure password. Note change this password to the one you stored as a secret in the vault.
 
 ```
-​    CREATE USER ECOM IDENTIFIED BY "password";
+​ CREATE USER ECOM IDENTIFIED BY "password";
 ```
 
 5. Finally run the entire schema. Note it only adds item and category data, there are no users, orders, or shopping carts.
@@ -100,12 +112,12 @@ Following are steps to set up the database schema:
 6. To check if the schema ran successfully run the following command in SQLDeveloper:
 
 ```
-SELECT * FROM ECOM.ITEM;
+​ SELECT * FROM ECOM.ITEM;
 ```
 This should show a table populated with list of items.
 
 ```
-SELECT * FROM ECOM.CATEGORY
+​ SELECT * FROM ECOM.CATEGORY
 ```
 This should show a table populated with category of items.
 
@@ -134,7 +146,7 @@ Next you need to setup the ssh tunnel for database connection
 To run the application locally for development use go in the e-commerce directory and run this command:
 
 ```
-​    $ source run.sh
+​    source run.sh
 ```
 
 View the application on http://localhost:8080/
