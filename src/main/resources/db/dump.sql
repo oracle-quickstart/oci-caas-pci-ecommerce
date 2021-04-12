@@ -1,7 +1,7 @@
 --------------------------------------------------------
 --  File created - Tuesday-August-18-2020   
 --------------------------------------------------------
-CREATE USER ECOM IDENTIFIED BY password;
+CREATE USER ECOM IDENTIFIED BY "password";
 GRANT CREATE SESSION TO ECOM;
 GRANT CREATE TYPE TO ECOM;
 GRANT DROP ANY TYPE TO ECOM;
