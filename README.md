@@ -48,9 +48,18 @@ To view the database password, go to the directory where you ran the oci-caas-cl
 
 The database username is <b>admin</b> and password is output in the terminal
 
+## Downloading Cloud Wallet
+Steps to download the cloud wallet from the console:
+1. In the OCI console, navigate to the ATP database that you created
+2. Click DB Connection.
+3. On the Database Connection page select the Wallet Type as Instance Wallet
+4. Click Download Wallet.
+
+Note: By default the filename is: Wallet_databasename.zip. You can save this file as any filename you want.
+
 ## Setting up the SSH tunnel
 
-In the OCI console, navigate to the ATP database that you created and download the Wallet. Once you downloaded the Wallet, unzip the folder and update tnsnames.ora to add the following new entry for SSH tunnel connection
+ Once you downloaded the Wallet, unzip the folder and update <b>tnsnames.ora</b> to add the following new entry for SSH tunnel connection
 
 ```
 
@@ -60,6 +69,8 @@ atpdb12d92_tunnel = (description= (retry_count=20)(retry_delay=3)(address=(proto
 
 Note that the port and host are updated to connect to your SSH tunnel. The entry is named {databasename}_connectionname. Adding this entry allows for connections to the database while using an ssh tunnel. It must be running to connect.
 
+Once you have made the changes to tsnames.ora file, zip the folder back up and save it.
+
 To create and run the ssh tunnel use the following command:
 
 ```
@@ -68,11 +79,11 @@ To create and run the ssh tunnel use the following command:
 
 ## Setting up the database schema
 
-Follwing are steps to set up the database schema:
+Following are steps to set up the database schema:
 
 1. Open the SQLDeveloper, and create a new connection and input the connection name, admin username, and password. 
 
-2. For connection type, enter cloud wallet and select the downloaded cloud wallet
+2. For connection type, enter cloud wallet and select the cloud wallet you modified and saved in the steps above.
 
 ![database_setup](<images/database_setup.jpg>)
 
@@ -81,7 +92,7 @@ Follwing are steps to set up the database schema:
 4. Change line 4 to a secure password and take note of it as ECOM user password. Note you are doing this to change the default password to a strong and a secure password. Note change this password to the one you stored as a secret in the vault.
 
 ```
-​    CREATE USER ECOM IDENTIFIED BY password;
+​    CREATE USER ECOM IDENTIFIED BY "password";
 ```
 
 5. Finally run the entire schema. Note it only adds item and category data, there are no users, orders, or shopping carts.
