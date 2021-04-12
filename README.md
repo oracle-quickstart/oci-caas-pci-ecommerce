@@ -97,7 +97,17 @@ Following are steps to set up the database schema:
 
 5. Finally run the entire schema. Note it only adds item and category data, there are no users, orders, or shopping carts.
 
+6. To check if the schema ran successfully run the following command in SQLDeveloper:
 
+```
+SELECT * FROM ECOM.ITEM;
+```
+This should show a table populated with list of items.
+
+```
+SELECT * FROM ECOM.CATEGORY
+```
+This should show a table populated with category of items.
 
 ## Running the application Locally
 
