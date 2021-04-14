@@ -4,7 +4,7 @@ const token = document.querySelector('input[name="_csrf"]').value;
 const productList = document.getElementById("product-list");
 const button = document.querySelector("button");
 
-let  stripe;
+let stripe;
 let cart = [];
 let cart_id = -1;
 let cart_total = 0;
