@@ -24,26 +24,26 @@ Folow the steps below to get the public and private API keys from Stripe:
 
 1. Create stripe [account](https://dashboard.stripe.com/test/dashboard)  
 
-2. Private and public API keys
+2. Get private and public API keys
 
 ## Getting started with OCI CAAS ECOMMERCE
 
 Clone the repository from Github:
 
 ```
-​   git clone https://github.com/oracle-quickstart/oci-caas-pci-ecommerce.git
+git clone https://github.com/oracle-quickstart/oci-caas-pci-ecommerce.git
 
-​   cd oci-caas-ecommerce
+cd oci-caas-pci-ecommerce
 ```
 
 ## Database setup
 
-Before you can run the OCI CAAS ECOMMERCE app you'll need spin up the oracle ATP database. To do this use the [oci-caas-client](https://github.com/oracle-quickstart/oci-caas-pci/tree/main/examples) and the [oci-caas-terraform](https://github.com/oracle-quickstart/oci-caas-pci) scripts. This will automatically provision the ATP database.
+Before you can run the OCI CAAS ECOMMERCE app you'll need spin up the oracle ATP database. To do this use the [oci-caas-client](https://github.com/oracle-quickstart/oci-caas-pci/tree/main/examples) and the [oci-caas-pci](https://github.com/oracle-quickstart/oci-caas-pci) scripts. This will automatically provision the ATP database.
 
 To view the database password, go to the directory where you ran the oci-caas-client and run the following:
 
 ```
-​   terraform show
+terraform show
 ```
 
 The database username is <b>admin</b> and password is output in the terminal
@@ -62,7 +62,7 @@ Note: By default the filename is: Wallet_databasename.zip. You can save this fil
 Once you downloaded the Wallet, unzip the folder. 
 
 ```
-​ unzip wallet_name.zip
+unzip wallet_name.zip
 ```
 
 Update <b>tnsnames.ora</b> to add the following new entry for SSH tunnel connection
@@ -80,13 +80,13 @@ Once you have made the changes to tsnames.ora file, zip the folder back up and s
 Use the following command to zip the folder:
 
 ```
-​ zip -r output_wallet_name.zip wallet_folder_name
+zip -r output_wallet_name.zip wallet_folder_name
 ```
 
 To create and run the ssh tunnel use the following command:
 
 ```
-​  ssh -L 127.0.0.1:1522:{db_private_ip}:1522 opc@{bastion_public_ip}
+ssh -L 127.0.0.1:1522:{db_private_ip}:1522 opc@{bastion_public_ip}
 ```
 
 ## Setting up the database schema
@@ -104,7 +104,7 @@ Following are steps to set up the database schema:
 4. Change line 4 to a secure password and take note of it as ECOM user password. Note you are doing this to change the default password to a strong and a secure password. Note change this password to the one you stored as a secret in the vault.
 
 ```
-​ CREATE USER ECOM IDENTIFIED BY "password";
+CREATE USER ECOM IDENTIFIED BY "password";
 ```
 
 5. Finally run the entire schema. Note it only adds item and category data, there are no users, orders, or shopping carts.
@@ -112,12 +112,12 @@ Following are steps to set up the database schema:
 6. To check if the schema ran successfully run the following command in SQLDeveloper:
 
 ```
-​ SELECT * FROM ECOM.ITEM;
+SELECT * FROM ECOM.ITEM;
 ```
 This should show a table populated with list of items.
 
 ```
-​ SELECT * FROM ECOM.CATEGORY
+SELECT * FROM ECOM.CATEGORY
 ```
 This should show a table populated with category of items.
 
@@ -127,15 +127,15 @@ Once the oci-caas-ecommerce repository is cloned, open it with any development e
 
 ```
 
-​        # stripe
-​        STRIPE_PUBLISHABLE_KEY=<pk_test_stripe_pub_key>
-​        STRIPE_SECRET_KEY=<sk_test_secret_key>
+# stripe
+STRIPE_PUBLISHABLE_KEY=<pk_test_stripe_pub_key>
+STRIPE_SECRET_KEY=<sk_test_secret_key>
 
-​        # db
-​        ORACLE_DB_NAME=atpdb12d92_tunnel
-​        ORACLE_DB_WALLET=</Users/user/path/to/wallet>
-​        ORACLE_DB_USER=ECOM
-​        ORACLE_DB_PASS=<'schema_pass'>
+# db
+ORACLE_DB_NAME=atpdb12d92_tunnel
+ORACLE_DB_WALLET=</Users/user/path/to/wallet>
+ORACLE_DB_USER=ECOM
+ORACLE_DB_PASS=<'schema_pass'>
 
 ```
 
@@ -146,7 +146,7 @@ Next you need to setup the ssh tunnel for database connection
 To run the application locally for development use go in the e-commerce directory and run this command:
 
 ```
-​    source run.sh
+source run.sh
 ```
 
 View the application on http://localhost:8080/
