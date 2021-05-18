@@ -8,7 +8,7 @@ For development, you will only need
 
 1. [Maven](http://maven.apache.org/install.html)
 
-2. Java 
+2. Java SE 11 (or newer)
 
 3. [SQLDeveloper](https://www.oracle.com/tools/downloads/sqldev-downloads.html)
 
@@ -28,6 +28,8 @@ Folow the steps below to get the public and private API keys from Stripe:
 
 ## Getting started with OCI CAAS ECOMMERCE
 
+### Project Code
+
 Clone the repository from Github:
 
 ```
@@ -36,7 +38,7 @@ git clone https://github.com/oracle-quickstart/oci-caas-pci-ecommerce.git
 cd oci-caas-pci-ecommerce
 ```
 
-## Database setup
+### Database setup
 
 Before you can run the OCI CAAS ECOMMERCE app you'll need spin up the oracle ATP database. To do this use the [oci-caas-client](https://github.com/oracle-quickstart/oci-caas-pci/tree/main/examples) and the [oci-caas-pci](https://github.com/oracle-quickstart/oci-caas-pci) scripts. This will automatically provision the ATP database.
 
@@ -48,7 +50,7 @@ terraform show
 
 The database username is <b>admin</b> and password is output in the terminal
 
-## Downloading Cloud Wallet
+### Downloading Cloud Wallet
 Steps to download the cloud wallet from the console:
 1. In the OCI console, navigate to the ATP database that you created
 2. Click DB Connection.
@@ -57,7 +59,7 @@ Steps to download the cloud wallet from the console:
 
 Note: By default the filename is: Wallet_databasename.zip. You can save this file as any filename you want.
 
-## Setting up the SSH tunnel
+### Setting up the SSH tunnel
 
 Once you downloaded the Wallet, unzip the folder. 
 
@@ -65,8 +67,13 @@ Once you downloaded the Wallet, unzip the folder.
 unzip wallet_name.zip
 ```
 
-Update <b>tnsnames.ora</b> to add the following new entry for SSH tunnel connection
+Update <b>tnsnames.ora</b> by copying any line in the file, then:
+* Set host to be equal to localhost.
+* Change the name to {wallet_name}_tunnel.
+* Paste this new line into tnsnames.ora
+* This will enable to you connect to the SSH tunnel.
 
+The new line should look similar to the line below:
 
 ```
 
@@ -74,13 +81,13 @@ atpdb12d92_tunnel = (description= (retry_count=20)(retry_delay=3)(address=(proto
 
 ```
 
-Note that the port and host are updated to connect to your SSH tunnel. The entry is named {databasename}_connectionname. Adding this entry allows for connections to the database while using an ssh tunnel. It must be running to connect.
+Note that the port and host are updated to connect to your SSH tunnel. The entry is named {databasename}_connectionname. Adding this entry allows for connections to the database while using an SSH tunnel. It must be running to connect.
 
 Once you have made the changes to tsnames.ora file, zip the folder back up and save it.
-Use the following command to zip the folder:
+Use the following command from within the folder to overwrite the old zip file with a new one that contains the updated tnsnames.ora file:
 
 ```
-zip -r output_wallet_name.zip wallet_folder_name
+zip -r output_wallet_name.zip .
 ```
 
 To create and run the ssh tunnel use the following command:
@@ -89,7 +96,7 @@ To create and run the ssh tunnel use the following command:
 ssh -L 127.0.0.1:1522:{db_private_ip}:1522 opc@{bastion_public_ip}
 ```
 
-## Setting up the database schema
+### Setting up the database schema
 
 Following are steps to set up the database schema:
 
@@ -121,7 +128,7 @@ SELECT * FROM ECOM.CATEGORY
 ```
 This should show a table populated with category of items.
 
-## Running the application Locally
+### Running the application Locally
 
 Once the oci-caas-ecommerce repository is cloned, open it with any development environment and update the credentials in <b>.env.example</b>. Change values that are encapsulated with <> (Please delete these brackets).
 
@@ -139,9 +146,11 @@ ORACLE_DB_PASS=<'schema_pass'>
 
 ```
 
-Once that is done copy or rename this .env.example file to .env. Note here the path to the wallet is the unzipped wallet with the tunnel entry.
+* Once that is done copy or rename this .env.example file to .env 
 
-Next you need to setup the ssh tunnel for database connection
+* Note here the path to the wallet is the unzipped wallet with the tunnel entry.
+
+* Next you need to setup the ssh tunnel for database connection
 
 To run the application locally for development use go in the e-commerce directory and run this command:
 
@@ -150,3 +159,11 @@ source run.sh
 ```
 
 View the application on http://localhost:8080/
+
+## Usage
+
+## How to Contribute
+Interested in contributing?  See our contribution [guidelines](CONTRIBUTE.md) for details.
+
+## License
+This repository and its contents are licensed under [UPL 1.0](https://raw.githubusercontent.com/oracle-quickstart/oci-caas-pci-ecommerce/main/LICENSE).
