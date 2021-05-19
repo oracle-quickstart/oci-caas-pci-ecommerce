@@ -116,18 +116,6 @@ CREATE USER ECOM IDENTIFIED BY "password";
 
 5. Finally run the entire schema. Note it only adds item and category data, there are no users, orders, or shopping carts.
 
-6. To check if the schema ran successfully run the following command in SQLDeveloper:
-
-```
-SELECT * FROM ECOM.ITEM;
-```
-This should show a table populated with list of items.
-
-```
-SELECT * FROM ECOM.CATEGORY
-```
-This should show a table populated with category of items.
-
 ### Running the application Locally
 
 Once the oci-caas-ecommerce repository is cloned, open it with any development environment and update the credentials in <b>.env.example</b>. Change values that are encapsulated with <> (Please delete these brackets).
@@ -166,6 +154,19 @@ Here is a demo of the application in action.
 <img src="images/app_demo.gif" alt="Application Demo Gif" style="width:500px;"/>
 
 ## Testing and Validation
+### Database
+Run the following commands in SQLDeveloper to ensure the database is working properly:
+
+```
+SELECT * FROM ECOM.ITEM;
+```
+This should show a table populated with list of items.
+
+```
+SELECT * FROM ECOM.CATEGORY
+```
+This should show a table populated with category of items.
+
 ### Products
 1. Ensure that all products and images are displayed in the homepage.
 
