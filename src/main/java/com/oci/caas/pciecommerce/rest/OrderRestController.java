@@ -1,6 +1,9 @@
 package com.oci.caas.pciecommerce.rest;
 
 import com.oci.caas.pciecommerce.model.User;
+import com.oci.caas.pciecommerce.model.Order;
+import com.oci.caas.pciecommerce.model.OrderRowMapper;
+
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -17,6 +20,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -265,4 +269,19 @@ public class OrderRestController {
         }
 
     }
+
+    @GetMapping(value = "/history", produces = "application/json")
+    @ResponseBody
+    public List<Order> orders() {
+
+        List<Order> orderList = null;
+        long uid = getUserId();
+
+        if (uid != -1) {
+            String query = "SELECT * from Orders WHERE user_id = ?";
+            orderList = jdbcTemplate.query(query, new OrderRowMapper(), uid);
+        }
+        return orderList;
+    }
+
 }

@@ -1,0 +1,18 @@
+html,
+#history-tab {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#history-tab tr:nth-child(even){background-color: white;}
+
+#history-tab tr:hover {background-color: #ddd;}
+
+#history-tab th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: white;
+    color: black;
+    text-align: center;
+}
