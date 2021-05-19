@@ -161,6 +161,9 @@ source run.sh
 View the application on http://localhost:8080/
 
 ## Usage
+Here is a demo of the application in action.
+
+![Example Run](images/app_demo.gif)
 
 ## How to Contribute
 Interested in contributing?  See our contribution [guidelines](CONTRIBUTE.md) for details.
