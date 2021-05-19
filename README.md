@@ -184,4 +184,4 @@ This should show a table populated with category of items.
 Interested in contributing?  See our contribution [guidelines](CONTRIBUTE.md) for details.
 
 ## License
-This repository and its contents are licensed under [UPL 1.0](https://raw.githubusercontent.com/oracle-quickstart/oci-caas-pci-ecommerce/main/LICENSE).
+This repository and its contents are licensed under [UPL 1.0](https://opensource.org/licenses/UPL).
