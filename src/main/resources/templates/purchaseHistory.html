@@ -1,10 +1,10 @@
 <!doctype html>
-
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cat Shop - Register</title>
+    <title>Cat Shop - Order History</title>
 
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/register.css"/>
@@ -14,15 +14,13 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
     <link rel="manifest" href="/images/favicon/site.webmanifest">
 
-    <script src="/js/register.js" defer></script>
+    <script src="/js/history.js" defer></script>
 
 </head>
-<body>
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <a class="navbar-brand" href="/">Cat Shop</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -36,7 +34,7 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Categories
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -52,12 +50,12 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Profile
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
                     <a class="dropdown-item" id="register-btn" href="/registration">Register</a>
-                    <a class="dropdown-item" href="/purchaseHistory">Purchase History</a>
+                    <a class="dropdown-item" id="history-btn" href="/purchaseHistory">Purchase History</a>
                     <a class="dropdown-item" id="login-btn" href="/login">Login</a>
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 </div>
@@ -66,48 +64,28 @@
 
     </div>
 </nav>
+<body>
+    <div class="history-table" id="history-table" style=" padding: 50px 500px 500px 400px; width: 100%; text-align:center;">
 
-<div class="signup-form pt-5">
-    <form id="registration-form">
-        <h2>Sign Up</h2>
-        <p>Please fill in this form to create an account!</p>
-        <hr>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <div class="form-group">
-            <input type="email" class="form-control" id="username" name="email" placeholder="Email" required="required">
-        </div>
-        <div class="form-group">
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required="required">
-        </div>
-        <div class="form-group">
-            <input type="password" class="form-control" id="password2" name="confirm_password" placeholder="Confirm Password" required="required">
-        </div>
-<!--        <div class="form-group">-->
-<!--            <label class="checkbox-inline"><input type="checkbox" required="required"> I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>-->
-<!--        </div>-->
-        <div class="form-group">
-            <button type="button" class="btn btn-primary btn-lg btn-block" id="submit-btn">Sign Up</button>
-        </div>
-    </form>
-    <div class="alert alert-success collapse" role="alert" id="success-alert">
-        Account successfully created. <a href="/login" class="alert-link">Log in</a>. Or continue <a href="/" class="alert-link">shopping</a>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <h2  id="view-history" >Purchase History</h2>
+        <img src="images/hero/hero6.jpg" width="100%" height="300px" style="padding-bottom: 10px">
+
+             <table id="history-tab" style="border: 1px black solid">
+                    <tr style="text-align:center ">
+                        <th>Order ID</th>
+                        <th>Total Price</th>
+                        <th>Tax</th>
+                        <th>Ship Date</th>
+                    </tr>
+                </table>
+
     </div>
-    <div class="alert alert-danger collapse" role="alert" id="fail-alert">
-        Account creation failed!
-    </div>
-</div>
 
-<!--<div class="text-center">-->
-<!--    <i class="icon-box"><span class="glyphicon glyphicon-ok"></span></i>-->
-<!--    <h1>Confirmation</h1>-->
-<!--    <p>Form submitted successfully. It's just for testing purpose, data not saved.</p>-->
-<!--</div>-->
 
-<script src="/js/jquery-3.5.1.slim.min.js"></script>
+    <script src="/js/jquery-3.5.1.slim.min.js"></script>
 <script src="/js/popper.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 </body>
+
+
 </html>
