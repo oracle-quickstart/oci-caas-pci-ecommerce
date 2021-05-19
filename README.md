@@ -165,6 +165,20 @@ Here is a demo of the application in action.
 
 <img src="images/app_demo.gif" alt="Application Demo Gif" style="width:500px;"/>
 
+## Testing and Validation
+### Products
+1. Ensure that all products and images are displayed in the homepage.
+
+### Register/Login
+1. Ensure that you are able to register for an account.
+1. After you've created an account, ensure that you are able to login.
+
+### Checkout
+1. Add some items to your cart. Then go to checkout.
+1. Ensure that you are able to fill out personal and payment information fields.
+1. After you've filled out the fields, submit your information.
+1. You should be redirected to a confirmation page.
+
 ## How to Contribute
 Interested in contributing?  See our contribution [guidelines](CONTRIBUTE.md) for details.
 
