@@ -24,24 +24,26 @@ class OrderHistory {
 }
 class UI {
     displayOrderHistory(orderHistory) {
-        let result = "";
+
+        let table = `<link rel="stylesheet" href="/css/purchaseHistory.css">
+                     <thead>
+                        <tr><th>Order ID</th>
+                            <th>Total Price</th>
+                            <th>Tax</th>
+                            <th>Ship Date</th>
+                            </tr>
+                     </thead>
+                     <tbody>`;
 
         orderHistory.forEach(orders => {
-            result = `
-                
-                <link rel="stylesheet" href="/css/purchaseHistory.css">
-                        <table id="history-tab">
-                        <tr>      
-                            <th>${orders.order_id}</th>
-                            <th>$${orders.final_order_total}</th>
-                            <th>${orders.tax}</th>
-                            <th>${orders.ship_date}</th>
-                         </tr>
-                        </table> 
-                </div>
-            `;
-            document.getElementById("history-table").innerHTML += result;
-        });
 
+            table += `<tr><td><b>${orders.order_id}</b></td>`;
+            table += `<td><b>$${orders.final_order_total}</b></td>`;
+            table += `<td><b>${orders.tax}</b></td>`;
+            table += `<td><b>${orders.ship_date}</b></td></tr>`;
+
+        });
+        table += `</tbody>`;
+        document.getElementById("history-tab").innerHTML += table;
     }
 }
