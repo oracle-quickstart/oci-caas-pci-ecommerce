@@ -80,6 +80,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/checkout").permitAll()
                 .antMatchers("/process-order").permitAll()
                 .antMatchers("/complete-order").permitAll()
+                .antMatchers("/history").permitAll()
+                .antMatchers("/purchaseHistory").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
