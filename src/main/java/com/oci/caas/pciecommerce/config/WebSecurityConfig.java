@@ -82,6 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/complete-order").permitAll()
                 .antMatchers("/history").permitAll()
                 .antMatchers("/purchaseHistory").permitAll()
+                .antMatchers("/error").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
