@@ -56,4 +56,9 @@ public class ViewRestController {
     public String purchaseHistory() {
         return "purchaseHistory";
     }
+
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
 }
