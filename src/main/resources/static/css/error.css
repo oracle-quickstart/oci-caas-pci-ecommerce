@@ -1,3 +1,9 @@
+#error{
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 25px;
+    -webkit-font-smoothing: antialiased;
+}
+
 .error{
     margin: 5% 30% 30% 30%;
     width: 100%;

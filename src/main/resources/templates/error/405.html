@@ -14,6 +14,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
     <link rel="manifest" href="/images/favicon/site.webmanifest">
+
+    <script src="/js/error.js" defer></script>
+
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
@@ -64,9 +67,9 @@
     </div>
 </nav>
 <body>
-    <div class="error" id="error">
+    <div class="error">
         <h2>405 Error</h2>
-        <h3>This method doesn't exist.</h3>
+        <h3>Method not supported on <span id="error"></span>.</h3>
         <a href="/">Go Home</a>
     </div>
 
