@@ -14,8 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.springframework.web.servlet.function.RequestPredicates.headers;
-
 /**
  * Configuration managing security through setting UserDetailService,
  * authentication provider, password encoder, and managing endpoints.
@@ -82,12 +80,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/complete-order").permitAll()
                 .antMatchers("/history").permitAll()
                 .antMatchers("/purchaseHistory").permitAll()
+                .antMatchers("/error").permitAll()
+                .antMatchers("/login").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
 
             .formLogin()
-                .loginPage("/login").permitAll()
+                .loginPage("/url").permitAll()
                 .loginProcessingUrl("/authenticate").permitAll()
                 .defaultSuccessUrl("/checkout")
                 .failureUrl("/login?error=true").permitAll()
