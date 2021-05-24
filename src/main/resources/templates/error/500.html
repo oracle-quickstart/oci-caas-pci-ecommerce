@@ -4,20 +4,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cat Shop - Order History</title>
+    <title>Cat Shop - Error</title>
 
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/register.css"/>
-    <link rel="stylesheet" href="/css/purchaseHistory.css">
+    <link rel="stylesheet" href="/css/error.css">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
     <link rel="manifest" href="/images/favicon/site.webmanifest">
 
-    <script src="/js/history.js" defer></script>
+    <script src="/js/error.js" defer></script>
 
 </head>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <a class="navbar-brand" href="/">Cat Shop</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -66,18 +67,15 @@
     </div>
 </nav>
 <body>
-    <div class="history" id="history">
-
-        <h2  id="view-history" >Purchase History</h2>
-        <img src="images/hero/hero6.jpg" class="d-block center-block w-100">
-        <table id="history-tab" border=1 >
-        </table>
-
+    <div class="error" id="error">
+        <h2>500 Error</h2>
+        <h3>Internal Server Error</h3>
+        <a href="/">Go Home</a>
     </div>
 
-<script src="/js/jquery-3.5.1.slim.min.js"></script>
-<script src="/js/popper.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.5.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,1 @@
+document.getElementById("error").innerHTML = window.location.pathname;
