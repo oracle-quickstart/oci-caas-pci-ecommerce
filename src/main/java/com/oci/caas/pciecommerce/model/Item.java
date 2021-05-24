@@ -5,7 +5,7 @@ public class Item {
     private long main_category;
     private int stock;
     private double unit_price;
-    private String name, description, brand_name, vendor_name;
+    private String name, description;
 
     public Item(long item_id, String name, int stock, double unit_price, String description, long main_category) {
         this.item_id = item_id;

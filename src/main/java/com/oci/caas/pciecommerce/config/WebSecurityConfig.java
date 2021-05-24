@@ -14,8 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.springframework.web.servlet.function.RequestPredicates.headers;
-
 /**
  * Configuration managing security through setting UserDetailService,
  * authentication provider, password encoder, and managing endpoints.

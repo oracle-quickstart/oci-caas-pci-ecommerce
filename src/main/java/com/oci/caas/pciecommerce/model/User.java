@@ -19,11 +19,6 @@ public class User implements UserDetails {
     private long user_id;
     private String email;
     private String password;
-    private String street_addr1;
-    private String street_addr2;
-    private String city;
-    private String state;
-    private String zipcode;
     private String user_role;
 
     public User(long user_id, String email, String password, String user_role) {
