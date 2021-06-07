@@ -1,7 +1,7 @@
 CREATE DATABASE mysql_cluster;
 USE mysql_cluster;
 CREATE USER ECOM IDENTIFIED BY "password";
-grant all privileges on mysql_cluster.* to 'admin'@'%';
+grant all privileges on mysql_cluster.* to 'ECOM'@'%';
 GRANT ALL ON CART_ITEMS TO ECOM;
 GRANT ALL ON CATEGORY TO ECOM;
 GRANT ALL ON ITEM TO ECOM;
