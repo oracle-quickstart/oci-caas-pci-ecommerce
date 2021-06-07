@@ -127,14 +127,30 @@ STRIPE_PUBLISHABLE_KEY=<pk_test_stripe_pub_key>
 STRIPE_SECRET_KEY=<sk_test_secret_key>
 
 # db
-ORACLE_DB_NAME=atpdb12d92_tunnel
+DB_NAME=atpdb12d92_tunnel
 ORACLE_DB_WALLET=</Users/user/path/to/wallet>
-ORACLE_DB_USER=ECOM
-ORACLE_DB_PASS=<'schema_pass'>
+DB_DRIVER_CLASS_NAME=<driver_class_name>
+DB_DATASOURCE_URL=<datasource_url>
+DB_USER=ECOM
+DB_PASS=<'schema_pass'>
 
 ```
+Note:
+1. The DB WALLET path is only required when using ATP database.
+2. The driver class name can any ONE of the below depending on which database you are using. 
+   ```
+   DB_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
+   OR 
+   DB_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver 
+   ```
+3. Similarly, the datasource url can be can any ONE of the below depending on which database you are using. 
+    ```
+   DB_DATASOURCE_URL=jdbc:oracle:thin:@${ORACLE_DB_NAME}?TNS_ADMIN=${ORACLE_DB_WALLET}
+   OR 
+   DB_DATASOURCE_URL=add_mysql_url_here
+    ```   
 
-* Once that is done copy or rename this .env.example file to .env 
+* Once that is done, copy or rename this .env.example file to .env 
 
 * Note here the path to the wallet is the unzipped wallet with the tunnel entry.
 
