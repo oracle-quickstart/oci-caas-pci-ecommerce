@@ -186,17 +186,12 @@ public class OrderRestController {
         if (uid == -1) {
             String insertUserQuery = "INSERT INTO STORE_USER (email, password, user_role) VALUES ('anon', 'anon', 'ROLE_ANONYMOUS')";
             anon_uid = insertUserQuery(insertUserQuery);
-            System.out.println("anon_uid: "+ anon_uid);
-
             String insertCartQuery = "INSERT INTO SHOPPING_CART (user_id, date_created) VALUES (?, CURRENT_DATE)";
             cart_id_out = insertCartQuery(insertCartQuery, anon_uid);
-            System.out.println("cart_id_out: "+ cart_id_out);
         } else {
             String insertCartQuery = "INSERT INTO SHOPPING_CART (user_id, date_created) VALUES (?, CURRENT_DATE)";
             cart_id_out = insertCartQuery(insertCartQuery, uid);
-            System.out.println("cart_id_out: "+ cart_id_out);
         }
-
         return cart_id_out;
 
     }
