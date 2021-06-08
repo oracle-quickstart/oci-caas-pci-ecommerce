@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.oci.caas</groupId>
 	<artifactId>pci-ecommerce</artifactId>
-	<version>0.6.0</version>
+	<version>1.0.0</version>
 	<name>pci-ecommerce</name>
 	<description>CaaS PCI compliant web app</description>
 
@@ -93,6 +93,11 @@
 					<artifactId>ons</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 
 		<dependency>
