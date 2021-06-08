@@ -96,9 +96,9 @@ To create and run the ssh tunnel use the following command:
 ssh -L 127.0.0.1:1522:{db_private_ip}:1522 opc@{bastion_public_ip}
 ```
 
-### Setting up the database schema
+### Setting up the ATP database schema
 
-Following are steps to set up the database schema:
+Following are steps to set up the ATP database schema:
 
 1. Open the SQLDeveloper, and create a new connection and input the connection name, admin username, and password. 
 
@@ -106,7 +106,7 @@ Following are steps to set up the database schema:
 
 ![Database setup image](<images/database_setup.jpg>)
 
-3. After the connection is successfully created, open the <b>dump.sql</b> from src/main/resources/db/
+3. After the connection is successfully created, open the <b>atp_schema.sql</b> from src/main/resources/db/
 
 4. Change line 4 to a secure password and take note of it as ECOM user password. Note you are doing this to change the default password to a strong and a secure password. Note change this password to the one you stored as a secret in the vault.
 
@@ -115,6 +115,13 @@ CREATE USER ECOM IDENTIFIED BY "password";
 ```
 
 5. Finally run the entire schema. Note it only adds item and category data, there are no users, orders, or shopping carts.
+
+### Setting up the MySQL database schema
+
+Following are steps to set up the MySQL database schema:
+
+1. After the connection is successfully created, open the <b>mysql_schema.sql</b> from src/main/resources/db/
+2. Change line 3 to a secure password and take note of it as ECOM user password. Note you are doing this to change the default password to a strong and a secure password. Note change this password to the one you stored as a secret in the vault.
 
 ### Running the application Locally
 
@@ -127,14 +134,30 @@ STRIPE_PUBLISHABLE_KEY=<pk_test_stripe_pub_key>
 STRIPE_SECRET_KEY=<sk_test_secret_key>
 
 # db
-ORACLE_DB_NAME=atpdb12d92_tunnel
+DB_NAME=atpdb12d92_tunnel
 ORACLE_DB_WALLET=</Users/user/path/to/wallet>
-ORACLE_DB_USER=ECOM
-ORACLE_DB_PASS=<'schema_pass'>
+DB_DRIVER_CLASS_NAME=<driver_class_name>
+DB_DATASOURCE_URL=<datasource_url>
+DB_USER=ECOM
+DB_PASS=<'schema_pass'>
 
 ```
+Note:
+1. The DB WALLET path is only required when using ATP database.
+2. The driver class name can any ONE of the below depending on which database you are using. 
+   ```
+   DB_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
+   OR 
+   DB_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver 
+   ```
+3. Similarly, the datasource url can be can any ONE of the below depending on which database you are using. 
+    ```
+   DB_DATASOURCE_URL=jdbc:oracle:thin:@${ORACLE_DB_NAME}?TNS_ADMIN=${ORACLE_DB_WALLET}
+   OR 
+   DB_DATASOURCE_URL=add_mysql_url_here
+    ```   
 
-* Once that is done copy or rename this .env.example file to .env 
+* Once that is done, copy or rename this .env.example file to .env 
 
 * Note here the path to the wallet is the unzipped wallet with the tunnel entry.
 

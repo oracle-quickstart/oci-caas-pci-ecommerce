@@ -31,7 +31,7 @@
   - Download [SQLDeveloper](https://www.oracle.com/database/technologies/appdev/sqldeveloper-landing.html)
   - Create a new connection and input the connection name, admin username, and password. 
   - For connection type, enter cloud wallet and select the downloaded cloud wallet
-  - Assuming the connection was created, open the `dump.sql` file located at `src/main/resources/db/`
+  - Assuming the connection was created, open the `atp_schema.sql` file located at `src/main/resources/db/`
   - Change line 4 to a secure password and ***take note of it as ECOM user password***
     ```sql
     CREATE USER ECOM IDENTIFIED BY password;

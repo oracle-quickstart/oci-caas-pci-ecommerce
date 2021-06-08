@@ -12,11 +12,8 @@ import com.stripe.param.PaymentIntentCreateParams;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SqlOutParameter;
-import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,11 +21,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.math.BigDecimal;
+import java.sql.PreparedStatement;
 import java.util.*;
-
-import oracle.jdbc.OracleTypes;
 
 /**
  * Rest Controller to receive requests related orders.
@@ -148,45 +142,90 @@ public class OrderRestController {
     }
 
     /**
-     * Calculates the total amount of the order by calling the createCartItems
-     * stored proc which allows for insertion into the shopping cart table.
+     *
+     * Performs the insert of the guest store user and returns the id for that user
+     * @param sql The insert query for the store user
+     * @return Returns the user id of the user the function just inserted
+     */
+    private int insertUserQuery(String sql){
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql,
+                    new String[] { "user_id" });
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().intValue();
+
+    }
+
+    /**
+     *
+     * Performs the insert of the shopping cart for a specific store user and returns the cart id for that user
+     * @param sql The insert query for the shopping cart for the user
+     * @param uid The user id for the user currently using the web application
+     * @return Returns the cart id of the shopping cart of the user the function just inserted
+     */
+    private int insertCartQuery(String sql, long uid){
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql,
+                    new String[] { "cart_id" });
+
+            ps.setInt(1, (int)uid);
+
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().intValue();
+    }
+
+    private int addCartItemsForUser(Long uid) {
+        int anon_uid, cart_id_out;
+        if (uid == -1) {
+            String insertUserQuery = "INSERT INTO STORE_USER (email, password, user_role) VALUES ('anon', 'anon', 'ROLE_ANONYMOUS')";
+            anon_uid = insertUserQuery(insertUserQuery);
+            String insertCartQuery = "INSERT INTO SHOPPING_CART (user_id, date_created) VALUES (?, CURRENT_DATE)";
+            cart_id_out = insertCartQuery(insertCartQuery, anon_uid);
+        } else {
+            String insertCartQuery = "INSERT INTO SHOPPING_CART (user_id, date_created) VALUES (?, CURRENT_DATE)";
+            cart_id_out = insertCartQuery(insertCartQuery, uid);
+        }
+        return cart_id_out;
+
+    }
+
+    /**
+     * Calculates the total amount of the order and inserts in the shopping cart table.
      * @param items ItemOrder[] to convert into comma delimited string of id and count
      * @return Object[] of cart id and calculated total amount
      */
     private Object[] calculateOrderAmount(ItemOrder[] items) {
 
         long uid = getUserId();
+        double total_out = 0, item_price;
+        int cart_id_out = addCartItemsForUser(uid);
 
         int itemCount = items.length;
-        List<String> il = new ArrayList<String>(itemCount);
-        List<String> ic = new ArrayList<String>(itemCount);
 
         for (int i = 0; i < itemCount; i++) {
-            il.add(String.valueOf(items[i].getId()));
-            ic.add(String.valueOf(items[i].getCount()));
+
+            int curr_id = Integer.valueOf( String.valueOf(items[i].getId()));
+            int curr_count = Integer.valueOf( String.valueOf(items[i].getCount()));
+            String insertQuery = "INSERT INTO CART_ITEMS (cart_id, item_id, quantity) VALUES (?, ?, ?)";
+            jdbcTemplate.update(
+                    insertQuery, cart_id_out, curr_id, curr_count);
+
+            String selectQuery = "SELECT unit_price FROM ITEM WHERE item_id = ?";
+            item_price = jdbcTemplate.queryForObject(selectQuery, Double.class, curr_id);
+            total_out +=  item_price * curr_count;
+
         }
-        String il_str = String.join(",", (List) il) + ",";
-        String ic_str = String.join(",", (List) ic) + ",";
+        String updateQuery = "UPDATE SHOPPING_CART SET curr_order_total = ? WHERE cart_id = ?";
+        jdbcTemplate.update(updateQuery, total_out, cart_id_out);
 
-        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("createCartItems")
-                .declareParameters(
-                        new SqlParameter("uid_in", OracleTypes.INTEGER),
-                        new SqlParameter("il_in", OracleTypes.VARCHAR),
-                        new SqlParameter("ic_in", OracleTypes.VARCHAR),
-                        new SqlOutParameter("cartid_out", OracleTypes.INTEGER),
-                        new SqlOutParameter("total_out", OracleTypes.DECIMAL));
-
-        Map<String, Object> inParamMap = new HashMap<String, Object>();
-        inParamMap.put("uid_in", uid);
-        inParamMap.put("il_in", il_str);
-        inParamMap.put("ic_in", ic_str);
-        SqlParameterSource in = new MapSqlParameterSource(inParamMap);
-
-
-        Map<String, Object> rs = simpleJdbcCall.execute(in);
-
-        return new Object[] {rs.get("cartid_out"), rs.get("total_out")};
+        return new Object[] {cart_id_out, total_out};
     }
 
     /**
@@ -205,7 +244,8 @@ public class OrderRestController {
         Stripe.apiKey = private_key;
 
         Object[] ret = calculateOrderAmount(postBody.getItems());
-        long total = ((BigDecimal) ret[1]).longValue() * 100;
+
+        long total = ((Double)ret[1]).longValue() * 100;
         int cart_id = (int) ret[0];
 
         PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
