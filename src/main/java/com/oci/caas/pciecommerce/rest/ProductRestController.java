@@ -26,7 +26,7 @@ public class ProductRestController {
      */
     @GetMapping(value = "/products", produces = "application/json")
     public List<Item> products() {
-        String query = "SELECT item_id, name, unit_price, stock, description, main_category from Item order by main_category";
+        String query = "SELECT item_id, name, unit_price, stock, description, main_category from ITEM order by main_category";
         List<Item> itemList = jdbcTemplate.query(query, new ItemRowMapper());
         return itemList;
     }
