@@ -122,7 +122,11 @@ Following are steps to set up the MySQL database schema:
 
 1. After the connection is successfully created, open the <b>mysql_schema.sql</b> from src/main/resources/db/
 2. Change line 3 to a secure password and take note of it as ECOM user password. Note you are doing this to change the default password to a strong and a secure password. Note change this password to the one you stored as a secret in the vault.
+3. To create and run the ssh tunnel use the following command:
 
+```
+ssh -L 3306:{db_private_ip}:3306 opc@{bastion_public_ip} -i {Path_to_private_key_file}
+```
 ### Running the application Locally
 
 Once the oci-caas-ecommerce repository is cloned, open it with any development environment and update the credentials in <b>.env.example</b>. Change values that are encapsulated with <> (Please delete these brackets).
@@ -154,7 +158,7 @@ Note:
     ```
    DB_DATASOURCE_URL=jdbc:oracle:thin:@${ORACLE_DB_NAME}?TNS_ADMIN=${ORACLE_DB_WALLET}
    OR 
-   DB_DATASOURCE_URL=add_mysql_url_here
+   DB_DATASOURCE_URL=jdbc:mysql://localhost:3306/${DB_NAME}?useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     ```   
 
 * Once that is done, copy or rename this .env.example file to .env 
