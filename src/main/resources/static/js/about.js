@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             let result = await fetch('/version');
             console.log(result)
-            // console.log(result);
             return result.json();
         } catch (e) {
             console.log(e);
