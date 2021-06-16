@@ -10,7 +10,6 @@ GRANT CREATE, SELECT ON ORDERS TO ECOM;
 GRANT CREATE ON SHOPPING_CART TO ECOM;
 GRANT CREATE ON STORE_USER TO ECOM;
 
-
 CREATE TABLE CART_ITEMS
 (
     ITEM_ID INT NOT NULL,
@@ -128,6 +127,7 @@ Insert into ITEM (UNIT_PRICE,STOCK,BRAND_NAME,VENDOR_NAME,NAME,DESCRIPTION,MAIN_
 (5,100,null,null,'Mu O-DeoSpray Deodorizer','Add an extra boost of freshness to your litter box. ARM AND HAMMER baking soda destroys odors instantly in all types of litter - so your box stays first-day fresh longer. ',12),
 (40,100,null,null,'Mu X-DeoSpray Deodorizer','Change the way you think about cleaning your cats litter box with the Purina Tidy Cats BREEZE With Ammonia Blocker Litter System starter kit. This system features powerful odor control to keep your house smelling fresh and clean, and the specially designed, cat-friendly litter pellets minimize your pets from tracking litter throughout your home.',12);
 
+-- ADDING FOREIGN KEYS
 
 ALTER TABLE CART_ITEMS ADD FOREIGN KEY (ITEM_ID)
     REFERENCES ITEM (ITEM_ID);
@@ -145,8 +145,9 @@ ALTER TABLE ORDERS ADD FOREIGN KEY (USER_ID)
     REFERENCES STORE_USER (USER_ID);
 
 ALTER TABLE SHOPPING_CART ADD FOREIGN KEY (USER_ID)
-REFERENCES STORE_USER (USER_ID) ;
+    REFERENCES STORE_USER (USER_ID) ;
 
+-- REVOKING UNNECESSARY PRIVILEGES
 
 REVOKE CREATE ON `mysql_cluster`.* FROM 'ECOM'@'%';
 REVOKE CREATE ON CART_ITEMS FROM ECOM;
