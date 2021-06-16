@@ -318,7 +318,7 @@ public class OrderRestController {
         long uid = getUserId();
 
         if (uid != -1) {
-            String query = "SELECT * from Orders WHERE user_id = ?";
+            String query = "SELECT * from ORDERS WHERE user_id = ?";
             orderList = jdbcTemplate.query(query, new OrderRowMapper(), uid);
         }
         return orderList;
