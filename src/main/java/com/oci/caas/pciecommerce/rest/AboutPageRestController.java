@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 public class AboutPageRestController {
@@ -22,13 +25,26 @@ public class AboutPageRestController {
         if (new File("pom.xml").exists()) {
             model = reader.read(new FileReader("pom.xml"));
         } else {
-            model = reader.read(
-                    new InputStreamReader(
-                            AboutPageRestController.class.getResourceAsStream(
-                                    "/META-INF/maven/pom.xml"
-                            )
-                    )
-            );
+            Path path = Paths.get("/META-INF/maven/pom.xml");
+            if (Files.exists(path)){
+                model = reader.read(
+                        new InputStreamReader(
+                                AboutPageRestController.class.getResourceAsStream(
+                                        "/META-INF/maven/pom.xml"
+                                )
+                        )
+                );
+            }
+            else{
+                model = reader.read(
+                        new InputStreamReader(
+                                AboutPageRestController.class.getResourceAsStream(
+                                        "/opt/tomcat_webapp/webapps/ROOT/META-INF/maven/com.oci.caas/pci-ecommerce/pom.xml"
+                                )
+                        )
+                );
+
+            }
         }
         return new VersionResponse(model.getVersion());
     }
