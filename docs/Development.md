@@ -40,8 +40,8 @@
 
 
 ### Installation
-The project repo is here: REPO_FQDN
-- `git clone REPO_FQDN`
+The project repo is here: https://bitbucket.oci.oraclecorp.com/projects/CAAS/repos/pci-ecommerce/browse
+- `git clone ssh://git@bitbucket.oci.oraclecorp.com:7999/caas/pci-ecommerce.git`
 - Change the credentials in `.env.example` and copy or rename it to .env
     ```bash
     # stripe
