@@ -40,8 +40,8 @@
 
 
 ### Installation
-The project repo is here: REPO_FQDN
-- `git clone REPO_FQDN`
+The project repo is here: https://github.com/oracle-quickstart/oci-caas-pci-ecommerce
+- `git clone https://github.com/oracle-quickstart/oci-caas-pci-ecommerce`
 - Change the credentials in `.env.example` and copy or rename it to .env
     ```bash
     # stripe
